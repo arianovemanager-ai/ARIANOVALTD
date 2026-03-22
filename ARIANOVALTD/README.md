@@ -1,23 +1,39 @@
-# Arianova B2B Platform
-A premium wine distribution platform built with Next.js 16 (Turbopack), Tailwind CSS, Clerk Authentication, and Sanity CMS.
+# Arianova | Luxury Wine Distribution Portal
 
-The application serves as a dedicated B2B logistics and distribution portal, connecting celebrated heritage estates (such as Tenute Dello Jato and Tenute Fosca) directly with professional retail markets.
+A bespoke, high-end B2B platform built for the digital age. Arianova connects heritage Italian estates directly with professional retail and hospitality markets through a seamless, neoclassical minimalist interface.
 
-## Key Features
-- **Sanity CMS Integration**: Dynamic inventory management tracking physical and committed stock.
-- **Stripe Webhooks**: Secure checkout and payment processing logic.
-- **Visual Scarcity Engine**: Real-time stock alerts native to the UI based on inventory thresholds.
-- **Distribution Model UI**: Completely responsive, luxury aesthetic leveraging Framer Motion and Next.js server-side rendering.
+## 🍷 The Journey
+This project was transformed from a standard template into a premium luxury experience, featuring:
+- **Neoclassical Aesthetics**: A curated palette of Deep Burgundy (`#4A0404`), Antique Cream (`#F9F6EE`), and Harvest Gold (`#B8860B`).
+- **Dynamic Scarcity**: Real-time inventory management powered by Sanity CMS.
+- **Global Compliance**: Integrated Stripe for secure, B2B-ready checkout.
 
-## Setup Instructions
-To run this project locally, ensure you have the required environment variables:
-`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_WRITE_TOKEN`
-`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `CLERK_WEBHOOK_SECRET`
-`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+## 🛠 Technical Stack
+- **Framework**: Next.js 16 (Turbopack) with App Router.
+- **Styling**: Vanilla CSS & Tailwind with custom luxury design tokens.
+- **Auth**: Clerk (Custom B2B "Trade Account" flow).
+- **CMS**: Sanity.io (Inventory, Partner Estates, Wine Archives).
+- **Payments**: Stripe (Webhooks for inventory synchronization).
+- **Email**: Resend (Automated receipts and allocation confirmations).
+- **Motion**: Framer Motion for tactile, immersive transitions.
 
-```bash
-npm install
-npm run dev
-```
+## 🚀 Deployment Highlights
+Successfully deployed to **Vercel** with full environmental security and webhook verification:
+- **Webhook Integration**: Real-time synchronization between Stripe/Clerk and the Sanity backend.
+- **Mobile First**: Bespoke animated hamburger menu for seamless collection browsing on all devices.
+- **SEO Optimized**: Semantic HTML and premium metadata for brand authority.
 
-*Note: For Next.js 16 routing configuration, ensure `src/proxy.ts` is configured instead of `middleware.ts` to prevent Turbopack deprecation panics.*
+## 🏁 Setup & Installation
+1. **Clone & Install**:
+   ```bash
+   npm install
+   ```
+2. **Environment Configuration**:
+   Ensure your `.env.local` contains valid Clerk, Stripe, Sanity, and Resend keys.
+3. **Run Development**:
+   ```bash
+   npm run dev
+   ```
+
+---
+*Created with focus on visual excellence and technical precision.*
