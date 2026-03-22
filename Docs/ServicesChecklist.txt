@@ -1,0 +1,60 @@
+GitHub / GitLab:
+
+Why: You need a place to push the code so Vercel can automatically deploy it.
+
+Tip: Create a fresh account with the project email so the repository is completely isolated from your other work.
+
+Vercel:
+
+Why: For hosting the Next.js storefront.
+
+Tip: Sign up by choosing "Continue with GitHub" using the account you just created. It makes linking the repository seamless.
+
+Sanity.io:
+
+Why: This is our database and logistics backend.
+
+Tip: Once you create the account and start a new project, it will give you a projectId. This is the exact key Antigravity needs right now to get your local Studio running.
+
+Clerk:
+
+Why: For customer authentication and the "Cellar Club" logins.
+
+Tip: Create a new "Application" in their dashboard. It will immediately hand you the NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY.
+
+Stripe:
+
+Why: For payment processing and triggering our inventory webhooks.
+
+Tip: You can set this up with the project email, but the owner will eventually need to log in and fill out the heavy legal/bank KYC (Know Your Customer) details. For now, you just need to grab the "Test Mode" API keys to build the checkout logic.
+
+Resend:
+
+Why: For the automated newsletter syncing and email receipts.
+
+Tip: Very quick setup. You just need to generate one API key.
+
+
+arianovamanager@gmail.com
+AriaNova123!!
+
+ngrok http 3000
+to run ngrok to test registrations
+
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+webhooks for stripe
+
+Github , autologin with google.
+Vercel , autologin with google.
+Clerk , autologin with google.
+Sanity.io , autologin with google.
+Stripe , autologin with google.
+
+
+Resend , autologin with google.
+
+Card number: 4242 4242 4242 4242 (Just repeat 4242 until it fills the box)
+Expiration date: Any date in the future (e.g., 12 / 34)
+CVC: Any 3 digits (e.g., 123)
+ZIP / Postal Code: Any 5 digits (e.g., 10001)
+Name: You can type any name you want.
