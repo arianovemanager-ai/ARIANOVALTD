@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { client } from '@/sanity/lib/client'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2023-10-16' as any,
 })
 
 export async function POST(req: Request) {
+  const stripe = getStripe()
   const body = await req.text()
   const sig = req.headers.get('stripe-signature') as string
-
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
   let event: Stripe.Event
@@ -24,113 +24,107 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 })
   }
 
+  const writeClient = client.withConfig({ token: process.env.SANITY_WRITE_TOKEN })
+
   // --- 1. FINALIZED PAYMENTS (Deduct Physical and Release Soft Lock) ---
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
-    console.log(`\n✅ [Stripe Webhook] Verified successful checkout for session: ${session.id}`)
+    const sessionId = session.id
+    console.log(`\n✅ [Stripe Webhook] Verified successful checkout for session: ${sessionId}`)
 
     try {
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id)
-      const clerkUserId = session.metadata?.clerkUserId
+      const idempotencyId = `processed-session-${sessionId}`
+      
+      // IDEMPOTENCY CHECK: Fetch first to avoid redundant heavy transactions
+      const existing = await client.fetch(`*[_id == $id][0]`, { id: idempotencyId })
+      if (existing) {
+        console.log(`⏭️ [Webhook] Skipping session ${sessionId} - Already processed.`)
+        return NextResponse.json({ received: true, skipped: true })
+      }
 
+      // METADATA SHORTCUT: Parse cart directly from session metadata
+      const serializedCart = session.metadata?.serializedCart
+      if (!serializedCart) {
+        throw new Error(`Missing serializedCart in metadata for session ${sessionId}`)
+      }
+      const cart = JSON.parse(serializedCart)
+
+      const tx = writeClient.transaction().create({
+        _id: idempotencyId,
+        _type: 'sessionRecord',
+        sessionId,
+        status: 'completed',
+        processedAt: new Date().toISOString()
+      })
+
+      const clerkUserId = session.metadata?.clerkUserId
       const customerPrefix = (clerkUserId && clerkUserId !== 'guest') ? `customer-${clerkUserId}` : undefined
       
-      const writeClient = client.withConfig({ token: process.env.SANITY_WRITE_TOKEN })
       const sanityOrderItems = []
       const emailItems = []
 
-      for (const item of lineItems.data) {
-        const productId = item.price?.product as string
-        if (!productId) continue;
+      for (const item of cart) {
+        tx.patch(item.id, p => p.dec({
+          physical_stock: item.qty,
+          committed_stock: item.qty 
+        }))
 
-        const product = await stripe.products.retrieve(productId)
-        const wineId = product.metadata?.wine_id
+        sanityOrderItems.push({
+          _key: Math.random().toString(36).substring(7),
+          _type: 'orderItem',
+          wine: { _type: 'reference', _ref: item.id },
+          quantity: item.qty,
+          priceAtPurchase: item.price,
+        })
         
-        if (wineId) {
-          const qty = item.quantity || 1
-          console.log(`📦 [Sanity Mutation] Finalizing ${qty} physical inventory for wine: ${wineId}`)
-          
-          await writeClient.patch(wineId)
-            .dec({
-              physical_stock: qty,
-              committed_stock: qty // Release the hold because payment officially cleared!
-            })
-            .commit()
-
-          sanityOrderItems.push({
-            _key: Math.random().toString(36).substring(7),
-            _type: 'orderItem',
-            wine: { _type: 'reference', _ref: wineId },
-            quantity: qty,
-            priceAtPurchase: item.price?.unit_amount || 0,
-          })
-          
-          emailItems.push({
-            title: product.name || 'Arianova Curated Vintage',
-            quantity: qty,
-            price: item.price?.unit_amount || 0,
-          })
-        }
+        emailItems.push({
+          title: item.title,
+          quantity: item.qty,
+          price: item.price,
+        })
       }
 
-      console.log(`🧾 [Sanity Mutation] Creating new Order document`)
-      const orderNumber = session.id.slice(-8).toUpperCase();
-      
-      await writeClient.create({
+      const orderNumber = sessionId.slice(-8).toUpperCase();
+      tx.create({
         _type: 'order',
         orderNumber: orderNumber,
-        stripeSessionId: session.id,
+        stripeSessionId: sessionId,
         customer: customerPrefix ? { _type: 'reference', _ref: customerPrefix } : undefined,
         totalAmount: session.amount_total,
         status: 'Processing',
         items: sanityOrderItems,
       })
 
+      await tx.commit()
       console.log(`🎉 [Success] Stripe checkout mapped natively to Inventory Logic!`)
       
-      // --- ENVIRONMENT-GATED TRANSACTIONAL EMAILS ---
+      // --- EMAIL NOTIFICATION LOGIC ---
       if (process.env.ENABLE_EMAILS === 'true') {
         try {
-          // Dynamic import bridging to prevent blowing up core webhooks if module is missing
           const { Resend } = await import('resend');
           // @ts-ignore
           const ReceiptEmail = (await import('@/emails/ReceiptEmail')).default;
-          
           const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
-          const customerName = session.customer_details?.name || 'Valued Collector';
           const email = session.customer_details?.email;
-          
           if (email) {
-            console.log(`✉️ [Resend API] Dispatching verified digital receipt to ${email}`);
-            
-            // Resend API returns an error object, it doesn't always throw a JS exception!
-            const { data, error: resendError } = await resend.emails.send({
-              from: 'Arianova Estate <onboarding@resend.dev>', // Free tier fallback domain
+            await resend.emails.send({
+              from: 'Arianova Estate <onboarding@resend.dev>',
               to: email,
               subject: `Your Arianova Allocation - Order #${orderNumber}`,
               react: ReceiptEmail({
                 orderNumber,
-                customerName,
+                customerName: session.customer_details?.name || 'Valued Collector',
                 totalAmount: session.amount_total || 0,
-                sessionId: session.id,
+                sessionId: sessionId,
                 items: emailItems,
                 appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
               })
             });
-            
-            if (resendError) {
-              console.error(`❌ [Resend API Error]: Delivery rejected.`, resendError);
-            } else {
-              console.log(`✅ [Success] Digital receipt transmitted flawlessly! ID: ${data?.id}`);
-            }
           }
         } catch (emailErr) {
-          console.error(`❌ [Email Error] Resend Engine Failed, but Order was mapped safely:`, emailErr);
+          console.error(`❌ [Email Error] Resend Engine Failed:`, emailErr);
         }
-      } else {
-        console.log(`💤 [Resend API] ENABLE_EMAILS is missing or false. Skipping digital receipt transmission.`);
       }
-      
     } catch (error) {
       console.error('❌ [Error] Failed to mutate Sanity backend on Completion:', error)
       return new NextResponse('Sanity Webhook Engine Failed', { status: 500 })
@@ -140,30 +134,43 @@ export async function POST(req: Request) {
   // --- 2. ABANDONED CARTS (Release Soft Lock Only) ---
   if (event.type === 'checkout.session.expired') {
     const session = event.data.object as Stripe.Checkout.Session
-    console.log(`\n⏳ [Stripe Webhook] Session Expired: ${session.id}. Reverting locks safely...`)
+    const sessionId = session.id
+    console.log(`\n⏳ [Stripe Webhook] Session Expired: ${sessionId}. Reverting locks safely...`)
 
     try {
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id)
-      const writeClient = client.withConfig({ token: process.env.SANITY_WRITE_TOKEN })
-
-      for (const item of lineItems.data) {
-        const productId = item.price?.product as string
-        if (!productId) continue;
-
-        const product = await stripe.products.retrieve(productId)
-        const wineId = product.metadata?.wine_id
-        
-        if (wineId) {
-          const qty = item.quantity || 1
-          console.log(`🔓 [Sanity Mutation] Releasing ${qty} committed bounds for wine: ${wineId}`)
-          
-          await writeClient.patch(wineId)
-            .dec({ committed_stock: qty }) // Purely release the hold dynamically, retaining physical stock
-            .commit()
-        }
+      const idempotencyId = `processed-session-${sessionId}`
+      const existing = await client.fetch(`*[_id == $id][0]`, { id: idempotencyId })
+      if (existing) {
+        console.log(`⏭️ [Webhook] Skipping session expiry ${sessionId} - Already processed.`)
+        return NextResponse.json({ received: true, skipped: true })
       }
+
+      // METADATA SHORTCUT
+      const serializedCart = session.metadata?.serializedCart
+      if (!serializedCart) {
+        console.warn(`[Webhook] No serializedCart found for expired session ${sessionId}. Standard cleanup skipped.`);
+        return NextResponse.json({ received: true });
+      }
+      const cart = JSON.parse(serializedCart)
+
+      const tx = writeClient.transaction().create({
+        _id: idempotencyId,
+        _type: 'sessionRecord',
+        sessionId,
+        status: 'expired',
+        processedAt: new Date().toISOString()
+      })
+
+      for (const item of cart) {
+        tx.patch(item.id, p => p.dec({ committed_stock: item.qty }))
+      }
+      
+      await tx.commit()
       console.log(`✅ [Success] Abandoned Locks Released natively!`)
-    } catch (error) {
+    } catch (error: any) {
+      if (error.statusCode === 409) {
+        return NextResponse.json({ received: true, skipped: true })
+      }
       console.error('❌ [Error] Failed to release inventory bounds on abandon:', error)
       return new NextResponse('Sanity Webhook Engine Failed', { status: 500 })
     }
