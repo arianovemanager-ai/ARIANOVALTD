@@ -7,10 +7,10 @@ export default function StoryPage() {
       <section className="pt-40 pb-20 px-6 text-center">
         <FadeInView direction="up">
           <h1 className="font-serif text-5xl md:text-7xl text-[#4A0404] tracking-wide mb-6">
-            Global Sourcing & Distribution
+            With Love, From Italy
           </h1>
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-[#4A0404]/60 font-semibold">
-            ACQUISITION • COMPLIANCE • DISTRIBUTION
+            THE ARIANOVA STORY • EMOTION • CONNECTION
           </p>
         </FadeInView>
       </section>
@@ -22,14 +22,14 @@ export default function StoryPage() {
           <div className="md:col-span-5 md:sticky top-32">
             <FadeInView direction="left">
                <h2 className="font-serif text-4xl text-[#4A0404] leading-tight mb-8">
-                 Strategic partnerships for global distribution.
+                 Because wine is never just wine.
                </h2>
                <div className="w-12 h-px bg-[#4A0404] mb-8" />
                <p className="font-sans text-[#4A0404]/80 leading-relaxed font-light mb-6">
-                 ARIANOVA is built on robust logistics and deep industry relationships. Our mission is to bridge the gap between world-class vineyards and premium retail markets, ensuring an efficient, reliable, and transparent supply chain.
+                 It’s a celebration, a pairing, a memory in the making. Every drinker is different — every moment is too. That’s why we curate wines that don’t just fit the table, but the feeling behind it.
                </p>
                <p className="font-sans text-[#4A0404]/80 leading-relaxed font-light">
-                 We act as your dedicated distribution partner, guaranteeing impeccable provenance, temperature-controlled logistics, and seamless delivery directly to your business.
+                 At Arianova, everything is done with love — not forced, but naturally born. Because love creates love, and what we bring is more than wine… it’s emotion, it’s connection, it’s bottled Italy.
                </p>
             </FadeInView>
           </div>
@@ -48,7 +48,7 @@ export default function StoryPage() {
             <FadeInView direction="up" delay={0.1}>
               <div className="bg-[#4A0404] text-[#F9F6EE] p-12 md:p-16 shadow-2xl mt-8">
                 <blockquote className="font-serif text-2xl md:text-3xl leading-relaxed italic border-l-2 border-[#F9F6EE]/30 pl-8">
-                  "Exceptional distribution requires more than logistics; it requires a profound respect for the product from the estate to its final destination."
+                  "Love creates love. We aim to spread emotions and fun, in a bottled love from Italy."
                 </blockquote>
               </div>
             </FadeInView>

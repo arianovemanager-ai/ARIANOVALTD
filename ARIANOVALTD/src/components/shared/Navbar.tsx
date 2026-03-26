@@ -18,7 +18,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Portfolio", href: "/", icon: Wine },
     { name: "Partner Estates", href: "/vineyard", icon: Briefcase },
-    { name: "Distribution Model", href: "/story", icon: BookOpen },
+    { name: "The Story", href: "/story", icon: BookOpen },
   ];
 
   return (
@@ -64,7 +64,7 @@ export default function Navbar() {
                     Sign In
                   </Link>
                   <Link href="/sign-up" className="inline-flex items-center justify-center px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-[#4A0404] bg-[#F9F6EE] hover:bg-[#EAE6D9] transition-colors rounded-sm shadow-sm">
-                    Trade Account
+                    Join the Curation
                   </Link>
                 </>
               ) : (
@@ -139,7 +139,7 @@ export default function Navbar() {
                     onClick={closeMenu}
                     className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold uppercase tracking-widest text-[#4A0404] bg-[#F9F6EE] rounded-sm shadow-lg w-full"
                   >
-                    Apply for Trade Account
+                    Join the Curation
                   </Link>
                 </>
               ) : (

@@ -44,7 +44,7 @@ export default function AddToCartButton({ wine, available }: AddToCartButtonProp
             ? 'bg-[#EAE6D9] text-[#4A0404]/40 cursor-not-allowed' 
             : 'transition-colors bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] hover:shadow-lg'}`}
       >
-        {isSoldOut ? "Sold Out" : "Acquire the Vintage"}
+        {isSoldOut ? "Sold Out" : "Add to My Curation"}
       </motion.button>
     </div>
   )

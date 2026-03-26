@@ -32,13 +32,13 @@ export default function VineyardPage() {
             </p>
             <div className="w-12 h-px bg-[#4A0404]/30 mb-8" />
             <p className="font-sans text-lg text-[#4A0404]/80 leading-relaxed font-light mb-8">
-              Situated in the heart of the Italian countryside, Tenute Dello Jato represents the pinnacle of sustainable, low-yield viticulture. ARIANOVA serves as the exclusive distribution partner for their most sought-after reserves, guaranteeing a direct pipeline from their historic cellars to your premium retail and hospitality venues.
+              Situated in the heart of the Italian countryside, Tenute Dello Jato represents the essence of sustainable, low-yield viticulture. ARIANOVA serves as the exclusive distribution partner for their most sought-after reserves, guaranteeing a direct pipeline from their historic cellars to your premium retail and hospitality venues.
             </p>
             <Link 
               href="/" 
               className="inline-block border border-[#4A0404] text-[#4A0404] hover:bg-[#4A0404] hover:text-[#F9F6EE] px-8 py-4 uppercase tracking-[0.2em] text-xs font-bold transition-all"
             >
-              Acquire the Vintage
+              Explore the Collection
             </Link>
           </FadeInView>
           <FadeInView direction="left" className="order-1 lg:order-2 h-96 lg:h-[500px]">
@@ -72,7 +72,7 @@ export default function VineyardPage() {
               href="/" 
               className="inline-block border border-[#F9F6EE] text-[#F9F6EE] hover:bg-[#F9F6EE] hover:text-[#4A0404] px-8 py-4 uppercase tracking-[0.2em] text-xs font-bold transition-all"
             >
-              Acquire the Vintage
+              Explore the Collection
             </Link>
           </FadeInView>
         </div>

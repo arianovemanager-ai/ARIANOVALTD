@@ -4,11 +4,12 @@ import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/shared/Navbar";
 import CartSidebar from "@/components/shared/CartSidebar";
 import { Toaster } from "sonner";
+import Footer from "@/components/shared/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Arianova | The Pinnacle of Viticulture",
-  description: "Curated vintage collections reserved for the modern connoisseur.",
+  title: "Arianova | Curation of Emotion & Italian Excellence",
+  description: "We don't just select wines — we design experiences. Every bottle is chosen to match a feeling, to elevate a moment, to turn a gathering into something rare.",
 };
 
 export default function RootLayout({
@@ -25,12 +26,12 @@ export default function RootLayout({
             title: 'MEMBER ACCESS | ARIANOVA CURATORS',
             subtitle: 'Welcome back to the Portfolio. Enter the cellar to view your private collection.',
             actionText: 'New to the curation?',
-            actionLink: 'Join the Membership'
+            actionLink: 'Join the Curation'
           }
         },
         signUp: {
           start: {
-            title: 'JOIN THE MEMBERSHIP',
+            title: 'JOIN THE CURATION',
             subtitle: 'Acquire exclusive allocations from the world\'s finest estates.',
             actionText: 'Already a member?',
             actionLink: 'Access the Collection'
@@ -55,6 +56,7 @@ export default function RootLayout({
           <CartProvider>
             <Navbar />
             <main className="flex-1 flex flex-col">{children}</main>
+            <Footer />
             <CartSidebar />
             <Toaster 
               position="bottom-center"
