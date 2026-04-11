@@ -39,9 +39,10 @@ export async function POST(req: Request) {
     const writeClient = client.withConfig({ token: process.env.SANITY_WRITE_TOKEN })
 
     // 1. Fetch current authentic stock & price for all items (inc. _rev for optimistic locking)
+    // Support both wines and events for shared checkout logic
     const wineIds = items.map((item: any) => item.id)
     const winesInDb = await writeClient.fetch(
-      `*[_type == "wine" && _id in $wineIds] { _id, physical_stock, committed_stock, price, title, _rev }`, 
+      `*[_type in ["wine", "event"] && _id in $wineIds] { _id, physical_stock, committed_stock, price, title, _rev }`, 
       { wineIds }
     )
 

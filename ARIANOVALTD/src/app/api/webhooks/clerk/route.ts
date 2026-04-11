@@ -44,38 +44,49 @@ export async function POST(req: Request) {
     })
   }
 
-  // Handle the 'user.created' event to generate the Sanity Shadow Profile
-  if (evt.type === 'user.created') {
+  const writeClient = client.withConfig({
+    token: process.env.SANITY_WRITE_TOKEN,
+  })
+
+  // --- 1. HANDLE USER CREATION & UPDATES ---
+  if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const { id: clerkId, email_addresses, first_name, last_name } = evt.data
     const primaryEmail = email_addresses?.[0]?.email_address || ''
 
-    // Safely combine name or fallback to the email prefix
+    // Logic: 1. Try first/last name 2. Try email prefix 3. Final fallback
     let fullName = [first_name, last_name].filter(Boolean).join(' ').trim()
+    
     if (!fullName && primaryEmail) {
-      fullName = primaryEmail.split('@')[0]
-    } else if (!fullName) {
-      fullName = 'Unknown Customer'
+      // Clean up email prefix (remove numbers/special symbols for a cleaner name)
+      const prefix = primaryEmail.split('@')[0]
+      fullName = prefix
+        .replace(/[._+]/g, ' ')
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+        .replace(/[0-9]/g, '')
+        .trim();
     }
 
-    try {
-      // Create an authorized write client. This requires SANITY_WRITE_TOKEN in .env.local
-      const writeClient = client.withConfig({
-        token: process.env.SANITY_WRITE_TOKEN,
-      })
+    if (!fullName) fullName = 'Anonymous Connoisseur'
 
-      // The createIfNotExists mutation ensures we don't accidentally duplicate
+    try {
       await writeClient.createIfNotExists({
         _id: `customer-${clerkId}`,
         _type: 'customer',
         clerkId,
         email: primaryEmail,
-        fullName,
       })
 
-      console.log(`Successfully created shadow profile in Sanity for user ${clerkId}`)
+      // Patch the name and email (in case they changed email too)
+      await writeClient.patch(`customer-${clerkId}`)
+        .set({ fullName, email: primaryEmail })
+        .commit()
+
+      console.log(`✅ [Webhook] Synchronized profile for ${clerkId} (${fullName})`)
     } catch (error) {
-      console.error('Error creating shadow profile in Sanity:', error)
-      return NextResponse.json({ error: 'Failed to create Sanity profile' }, { status: 500 })
+      console.error('❌ [Webhook Error] Sanity Sync Failed:', error)
+      return NextResponse.json({ error: 'Failed to sync Sanity profile' }, { status: 500 })
     }
   }
 

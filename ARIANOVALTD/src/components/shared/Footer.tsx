@@ -2,8 +2,12 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { usePathname } from "next/navigation"
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname && pathname.startsWith('/studio')) return null;
+
   return (
     <footer className="bg-[#4A0404] text-[#F9F6EE] py-24 px-6 border-t border-[#F9F6EE]/10">
       <div className="container mx-auto max-w-6xl">

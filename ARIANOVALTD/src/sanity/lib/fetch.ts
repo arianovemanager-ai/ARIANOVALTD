@@ -13,7 +13,7 @@ export async function sanityFetch<QueryResponse>({
 }) {
   return client.fetch<QueryResponse>(query, params, {
     next: {
-      revalidate: 60, // Automatically cache response, revalidating every 60 seconds
+      revalidate: 0, // Bypass static caching to ensure storefront is always 100% sync'd with database
       tags,
     },
   });

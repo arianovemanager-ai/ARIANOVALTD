@@ -1,5 +1,12 @@
 import { defineType, defineField } from 'sanity'
 
+/**
+ * SESSION RECORD (Internal System Document)
+ * This schema acts as the backbone for the Stripe Safety Net.
+ * It stores processed Stripe Session IDs to guarantee idempotency.
+ * If a webhook is retried by Stripe, we check for a document of this type
+ * (with _id: processed-session-{sessionId}) to avoid double-deduction.
+ */
 export const sessionRecordType = defineType({
   name: 'sessionRecord',
   title: 'Session Record (Internal)',

@@ -35,20 +35,26 @@ export async function POST(req: Request) {
     try {
       const idempotencyId = `processed-session-${sessionId}`
       
-      // IDEMPOTENCY CHECK: Fetch first to avoid redundant heavy transactions
+      // 1. IDEMPOTENCY CHECK (Safety Net Layer 1): 
+      // We create a unique ID for this transaction so Sanity guarantees we only process this event ONCE. 
+      // We check here first to skip heavy processing if it's already done (e.g. from retries).
       const existing = await client.fetch(`*[_id == $id][0]`, { id: idempotencyId })
       if (existing) {
         console.log(`⏭️ [Webhook] Skipping session ${sessionId} - Already processed.`)
         return NextResponse.json({ received: true, skipped: true })
       }
 
-      // METADATA SHORTCUT: Parse cart directly from session metadata
+      // 2. METADATA SHORTCUT (Safety Net Layer 2):
+      // Instead of querying Sanity for the full cart, we stringified the cart during Checkout.
+      // This eliminates failure points and ensures we are mapping exactly what they checked out with.
       const serializedCart = session.metadata?.serializedCart
       if (!serializedCart) {
         throw new Error(`Missing serializedCart in metadata for session ${sessionId}`)
       }
       const cart = JSON.parse(serializedCart)
 
+      // 3. ATOMIC TRANSACTION INITIALIZATION
+      // All mutations below will occur at the EXACT same time. If one fails, they all fail.
       const tx = writeClient.transaction().create({
         _id: idempotencyId,
         _type: 'sessionRecord',
@@ -64,6 +70,8 @@ export async function POST(req: Request) {
       const emailItems = []
 
       for (const item of cart) {
+        // 4. INVENTORY DEDUCTION (Safety Net Layer 3)
+        // Deduct physical stock AND release the temporary committed stock lock at the same time.
         tx.patch(item.id, p => p.dec({
           physical_stock: item.qty,
           committed_stock: item.qty 
@@ -125,9 +133,9 @@ export async function POST(req: Request) {
           console.error(`❌ [Email Error] Resend Engine Failed:`, emailErr);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ [Error] Failed to mutate Sanity backend on Completion:', error)
-      return new NextResponse('Sanity Webhook Engine Failed', { status: 500 })
+      return new NextResponse(`Sanity Webhook Engine Failed: ${error.message}`, { status: 500 })
     }
   }
 
@@ -162,6 +170,7 @@ export async function POST(req: Request) {
       })
 
       for (const item of cart) {
+        // Here we ONLY release the committed stock lock, to free it back into the wild for other users.
         tx.patch(item.id, p => p.dec({ committed_stock: item.qty }))
       }
       

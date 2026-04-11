@@ -24,3 +24,16 @@ export const SINGLE_WINE_QUERY = groq`*[_type == "wine" && slug.current == $slug
   physical_stock,
   committed_stock
 }`;
+
+export const EVENTS_QUERY = groq`*[_type == "event" && date >= now()] | order(date asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  date,
+  location,
+  price,
+  description,
+  "imageUrl": images[0].asset->url,
+  physical_stock,
+  committed_stock
+}`;

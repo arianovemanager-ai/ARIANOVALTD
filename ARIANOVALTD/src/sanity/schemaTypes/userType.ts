@@ -6,14 +6,24 @@ export const userType = defineType({
   type: 'document',
   fields: [
     defineField({ 
+      name: 'fullName', 
+      title: 'Full Name', 
+      type: 'string',
+      validation: (Rule) => Rule.required().error('Arianova dossiers require a formal name.')
+    }),
+    defineField({ 
+      name: 'email', 
+      title: 'Email Address', 
+      type: 'string', 
+      readOnly: true 
+    }),
+    defineField({ 
       name: 'clerkId', 
       title: 'Clerk ID', 
       type: 'string', 
-      readOnly: true, // Only the webhook should write this
+      readOnly: true,
       description: 'The unique identifier synced from Clerk Authentication.'
     }),
-    defineField({ name: 'fullName', title: 'Full Name', type: 'string' }),
-    defineField({ name: 'email', title: 'Email Address', type: 'string' }),
     defineField({
       name: 'palatePreferences',
       title: 'Palate Preferences',
@@ -44,4 +54,16 @@ export const userType = defineType({
     }),
     defineField({ name: 'newsletterOptIn', title: 'Newsletter Opt-In', type: 'boolean', initialValue: false }),
   ],
+  preview: {
+    select: {
+      title: 'fullName',
+      subtitle: 'email',
+    },
+    prepare({ title, subtitle }) {
+      return {
+        title: title || 'Anonymous Connoisseur',
+        subtitle: subtitle || 'Secure Dossier',
+      }
+    }
+  }
 })

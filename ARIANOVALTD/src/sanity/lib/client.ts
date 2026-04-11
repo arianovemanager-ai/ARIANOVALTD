@@ -5,5 +5,5 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // Set to false if statically generating pages or using ISR
+  useCdn: false, // Set to false to ensure live e-commerce inventory syncs directly with the master database
 })

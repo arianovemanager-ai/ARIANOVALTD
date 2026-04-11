@@ -58,7 +58,7 @@ export default function RootLayout({
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />
             <CartSidebar />
-            <Toaster 
+            <Toaster
               position="bottom-center"
               toastOptions={{
                 style: { background: '#F9F6EE', color: '#4A0404', borderColor: 'rgba(74, 4, 4, 0.1)', flexWrap: 'nowrap' }

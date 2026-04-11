@@ -4,19 +4,25 @@ import { useState } from "react"
 import Link from "next/link"
 import { useAuth, ClerkLoading, ClerkLoaded, UserButton } from "@clerk/nextjs"
 import { useCart } from "@/context/CartContext"
-import { ShoppingCart, Loader2, Menu, X, Wine, BookOpen, Briefcase } from "lucide-react"
+import { ShoppingCart, Loader2, Menu, X, Wine, BookOpen, Briefcase, Calendar } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
+import { usePathname } from "next/navigation"
+
 export default function Navbar() {
+  const pathname = usePathname();
   const { userId } = useAuth();
   const { totalItems, isHydrated, openCart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  if (pathname && pathname.startsWith('/studio')) return null;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
   const navLinks = [
     { name: "Portfolio", href: "/", icon: Wine },
+    { name: "Events", href: "/events", icon: Calendar },
     { name: "Partner Estates", href: "/vineyard", icon: Briefcase },
     { name: "The Story", href: "/story", icon: BookOpen },
   ];
