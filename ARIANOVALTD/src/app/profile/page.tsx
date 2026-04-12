@@ -34,8 +34,8 @@ export default async function DossierPage() {
   return (
     <div className="flex flex-col gap-12">
       <div>
-        <h1 className="font-serif text-4xl text-[#4A0404] mb-2 tracking-wide">Member Dossier</h1>
-        <p className="text-xs font-semibold uppercase tracking-widest text-[#4A0404]/60 mb-8">
+        <h1 className="font-serif text-4xl text-brand-foreground mb-2 tracking-wide">Member Dossier</h1>
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand-foreground/60 mb-8">
           Confidential Profile Settings
         </p>
         
@@ -47,9 +47,9 @@ export default async function DossierPage() {
       </div>
 
       {/* Synchronized Palate Preferences Segments */}
-      <div className="bg-white border border-[#4A0404]/10 rounded-sm shadow-sm p-8">
-        <h3 className="font-serif text-2xl text-[#4A0404] mb-2">Palate Preferences</h3>
-        <p className="text-sm text-[#4A0404]/60 mb-8 font-medium">
+      <div className="bg-brand-surface border border-brand-border rounded-sm shadow-2xl p-8">
+        <h3 className="font-serif text-2xl text-brand-foreground mb-2">Palate Preferences</h3>
+        <p className="text-sm text-brand-foreground/60 mb-8 font-medium">
           Configure your dossiers exclusively aligning personalized vintage layouts.
         </p>
         
@@ -60,10 +60,10 @@ export default async function DossierPage() {
       </div>
 
       {/* Explicit Security Integration Boundaries Custom Theme Mapping */}
-      <div className="bg-white border border-[#4A0404]/10 rounded-sm shadow-sm overflow-hidden flex flex-col">
-        <div className="p-8 pb-0 border-b border-[#4A0404]/5 bg-[#4A0404]/5">
-            <h3 className="font-serif text-2xl text-[#4A0404] mb-2">Security Integrations</h3>
-            <p className="text-sm text-[#4A0404]/60 mb-6 font-medium">Native authentication parameters mapping safely mapped.</p>
+      <div className="bg-brand-surface border border-brand-border rounded-sm shadow-2xl overflow-hidden flex flex-col">
+        <div className="p-8 pb-0 border-b border-brand-border bg-brand-bg/40">
+            <h3 className="font-serif text-2xl text-brand-foreground mb-2">Security Integrations</h3>
+            <p className="text-sm text-brand-foreground/60 mb-6 font-medium">Native authentication parameters mapping safely mapped.</p>
         </div>
         <UserProfile 
           routing="hash"
@@ -74,9 +74,9 @@ export default async function DossierPage() {
               pageScrollBox: "px-8 py-4",
               headerTitle: "hidden", 
               headerSubtitle: "hidden",
-              profileSectionTitleText: "text-[10px] font-bold tracking-widest uppercase text-[#4A0404]/50",
-              formButtonPrimary: "bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-sm shadow-sm",
-              profileSectionContent: "border-b border-[#4A0404]/10 pb-6 mb-6",
+              profileSectionTitleText: "text-[10px] font-bold tracking-widest uppercase text-brand-accent",
+              formButtonPrimary: "bg-brand-accent text-brand-bg hover:bg-brand-accent/90 text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-sm shadow-xl transition-all",
+              profileSectionContent: "border-b border-brand-border pb-6 mb-6",
             }
           }}
         />

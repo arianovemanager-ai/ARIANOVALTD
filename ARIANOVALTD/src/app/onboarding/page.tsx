@@ -45,18 +45,18 @@ export default function OnboardingFlow() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F6EE] flex items-center justify-center p-6 relative z-50">
+    <div className="min-h-screen bg-brand-bg flex items-center justify-center p-6 relative z-50">
       <div className="max-w-xl w-full">
         <div className="text-center mb-12">
-          <h1 className="font-serif text-3xl md:text-4xl text-[#4A0404] mb-3 tracking-wide">
+          <h1 className="font-serif text-3xl md:text-4xl text-brand-foreground mb-3 tracking-wide">
             Sommelier Consultation
           </h1>
-          <p className="text-[#4A0404]/60 text-sm uppercase tracking-widest font-semibold">
+          <p className="text-brand-foreground/60 text-sm uppercase tracking-widest font-semibold">
             Curating your exclusive dossier
           </p>
         </div>
 
-        <div className="bg-white border border-[#4A0404]/10 rounded-sm shadow-xl p-8 min-h-[420px] flex flex-col relative overflow-hidden">
+        <div className="bg-white border border-brand-border/10 rounded-sm shadow-xl p-8 min-h-[420px] flex flex-col relative overflow-hidden">
           <AnimatePresence mode="wait">
             
             {step === 1 && (
@@ -68,7 +68,7 @@ export default function OnboardingFlow() {
                 transition={{ duration: 0.3 }}
                 className="flex flex-col h-full"
               >
-                <h2 className="font-serif text-2xl text-[#4A0404] mb-8 text-center">What defines your palate?</h2>
+                <h2 className="font-serif text-2xl text-brand-foreground mb-8 text-center">What defines your palate?</h2>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-auto">
                    {[
@@ -85,12 +85,12 @@ export default function OnboardingFlow() {
                          onClick={() => togglePreference(item.id)}
                          className={`p-4 border rounded-sm flex items-center gap-3 transition-all ${
                            isSelected 
-                             ? 'border-[#4A0404] bg-[#4A0404]/5 ring-1 ring-[#4A0404]' 
-                             : 'border-[#4A0404]/10 hover:border-[#4A0404]/40'
+                             ? 'border-brand-border bg-brand-surface/5 ring-1 ring-brand-accent' 
+                             : 'border-brand-border/10 hover:border-brand-border/40'
                          }`}
                        >
-                         <Icon className={`w-5 h-5 ${isSelected ? 'text-[#4A0404]' : 'text-[#4A0404]/50'}`} />
-                         <span className={`font-serif text-lg ${isSelected ? 'text-[#4A0404]' : 'text-[#4A0404]/70'}`}>
+                         <Icon className={`w-5 h-5 ${isSelected ? 'text-brand-foreground' : 'text-brand-foreground/50'}`} />
+                         <span className={`font-serif text-lg ${isSelected ? 'text-brand-foreground' : 'text-brand-foreground/70'}`}>
                            {item.label}
                          </span>
                        </button>
@@ -102,7 +102,7 @@ export default function OnboardingFlow() {
                   <button
                     disabled={preferences.length === 0}
                     onClick={() => setStep(2)}
-                    className="w-full py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-brand-surface text-brand-foreground hover:bg-brand-accent/80 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Continue
                   </button>
@@ -119,7 +119,7 @@ export default function OnboardingFlow() {
                 transition={{ duration: 0.3 }}
                 className="flex flex-col h-full"
               >
-                <h2 className="font-serif text-2xl text-[#4A0404] mb-8 text-center">How frequently do you taste?</h2>
+                <h2 className="font-serif text-2xl text-brand-foreground mb-8 text-center">How frequently do you taste?</h2>
                 
                 <div className="flex flex-col gap-4 mb-auto">
                    {[
@@ -136,12 +136,12 @@ export default function OnboardingFlow() {
                          onClick={() => setFrequency(item.id)}
                          className={`p-4 border rounded-sm flex items-center gap-4 transition-all ${
                            isSelected 
-                             ? 'border-[#4A0404] bg-[#4A0404]/5 ring-1 ring-[#4A0404]' 
-                             : 'border-[#4A0404]/10 hover:border-[#4A0404]/40'
+                             ? 'border-brand-border bg-brand-surface/5 ring-1 ring-brand-accent' 
+                             : 'border-brand-border/10 hover:border-brand-border/40'
                          }`}
                        >
-                         <Icon className={`w-5 h-5 ${isSelected ? 'text-[#4A0404]' : 'text-[#4A0404]/50'}`} />
-                         <span className={`font-serif text-lg ${isSelected ? 'text-[#4A0404]' : 'text-[#4A0404]/70'}`}>
+                         <Icon className={`w-5 h-5 ${isSelected ? 'text-brand-foreground' : 'text-brand-foreground/50'}`} />
+                         <span className={`font-serif text-lg ${isSelected ? 'text-brand-foreground' : 'text-brand-foreground/70'}`}>
                            {item.label}
                          </span>
                        </button>
@@ -152,14 +152,14 @@ export default function OnboardingFlow() {
                 <div className="flex gap-4 pt-8 mt-4">
                   <button
                     onClick={() => setStep(1)}
-                    className="px-6 py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm border border-[#4A0404]/20 text-[#4A0404] hover:bg-[#4A0404]/5"
+                    className="px-6 py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm border border-brand-border/20 text-brand-foreground hover:bg-brand-surface/5"
                   >
                     Back
                   </button>
                   <button
                     disabled={!frequency || isSubmitting}
                     onClick={handleComplete}
-                    className="flex-1 py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+                    className="flex-1 py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-brand-surface text-brand-foreground hover:bg-brand-accent/80 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
                   >
                     {isSubmitting ? "Finalizing..." : "Secure Dossier"}
                   </button>

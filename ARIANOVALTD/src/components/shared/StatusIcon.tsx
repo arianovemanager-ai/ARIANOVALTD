@@ -18,5 +18,5 @@ export default function StatusIcon({ status, id }: { status: string, id?: string
   if (status === 'Shipped') {
     return <PackageCheck className="w-4 h-4 text-green-700" />
   }
-  return <Package className="w-4 h-4 text-[#4A0404]/60" />
+  return <Package className="w-4 h-4 text-brand-foreground/60" />
 }

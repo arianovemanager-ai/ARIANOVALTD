@@ -31,40 +31,43 @@ export default function WineCard({ wine }: WineCardProps) {
       style={{ WebkitTapHighlightColor: "transparent" }}
     >
       <motion.div 
-        className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5F5DC]/50 rounded-sm"
-        whileHover={{ boxShadow: "0px 10px 30px rgba(74, 4, 4, 0.1)" }}
+        className="relative aspect-[3/4] w-full overflow-hidden bg-brand-surface border border-brand-border/30 rounded-sm"
+        whileHover={{ 
+          boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.8)",
+          borderColor: "rgba(212, 175, 55, 0.4)" 
+        }}
       >
         {wine.imageUrl ? (
           <Image
             src={wine.imageUrl}
             alt={wine.title}
             fill
-            className={`object-cover transition-all duration-700 group-hover:scale-105 ${isSoldOut ? 'opacity-80 grayscale sm:grayscale-0' : ''}`}
+            className={`object-cover transition-all duration-1000 group-hover:scale-110 ${isSoldOut ? 'opacity-80 grayscale sm:grayscale-0' : ''}`}
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-[#4A0404]/30 font-serif text-sm">
+          <div className="absolute inset-0 flex items-center justify-center text-brand-foreground/30 font-serif text-sm">
             Vintage Hidden
           </div>
         )}
         
         {/* Visual Scarcity Sub-System */}
         {isSoldOut ? (
-          <div className="absolute top-4 right-4 bg-[#4A0404] text-[#F9F6EE] text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-sm backdrop-blur-md">
+          <div className="absolute top-4 right-4 bg-brand-surface/90 text-brand-foreground text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-xl backdrop-blur-md border border-brand-border/50">
             Cellar Empty
           </div>
         ) : available <= 5 ? (
-          <div className="absolute top-4 right-4 bg-[#B8860B] text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-sm backdrop-blur-md">
+          <div className="absolute top-4 right-4 bg-brand-accent text-brand-bg text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-xl backdrop-blur-md border border-brand-accent/30">
             Rare Vintage: Only {available} left!
           </div>
         ) : null}
       </motion.div>
 
       <div className="flex flex-col gap-1.5 text-center mt-1 px-2">
-        <h3 className="font-serif text-lg tracking-wide text-[#4A0404] truncate transition-colors group-hover:text-[#4A0404]/70">
+        <h3 className="font-serif text-lg tracking-wide text-brand-foreground truncate transition-colors group-hover:text-brand-foreground/70">
           {wine.title}
         </h3>
-        <div className="flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-[#4A0404]/60">
+        <div className="flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-brand-foreground/60">
           <span>{wine.vintage || "NV"}</span>
           <span>•</span>
           <span>${(wine.price / 100).toFixed(2)}</span>

@@ -5,7 +5,19 @@ import Navbar from "@/components/shared/Navbar";
 import CartSidebar from "@/components/shared/CartSidebar";
 import { Toaster } from "sonner";
 import Footer from "@/components/shared/Footer";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Arianova | Curation of Emotion & Italian Excellence",
@@ -40,19 +52,22 @@ export default function RootLayout({
       }}
       appearance={{
         variables: {
-          colorPrimary: "#4A0404",
-          colorBackground: "#F5F5DC",
+          colorPrimary: "#D4AF37",
+          colorBackground: "#0B0B0B",
+          colorText: "#F5F5F5",
+          colorInputText: "#F5F5F5",
+          colorInputBackground: "#1A1A1A",
         },
         elements: {
-          card: "bg-[#F5F5DC]",
-          headerTitle: "font-serif text-[#4A0404]",
-          headerSubtitle: "text-[#4A0404]/80",
-          formButtonPrimary: "bg-[#4A0404] hover:bg-[#3A0303] text-[#F5F5DC]",
+          card: "bg-brand-surface border border-brand-border",
+          headerTitle: "font-serif text-brand-foreground",
+          headerSubtitle: "text-brand-foreground/80",
+          formButtonPrimary: "bg-brand-foreground hover:bg-brand-accent text-brand-bg font-bold tracking-widest uppercase transition-colors",
         },
       }}
     >
-      <html lang="en" className="h-full antialiased">
-        <body className="min-h-full flex flex-col font-serif">
+      <html lang="en" className={`h-full antialiased dark ${inter.variable} ${cormorant.variable}`}>
+        <body className="min-h-full flex flex-col font-sans selection:bg-brand-accent/30 selection:text-brand-accent">
           <CartProvider>
             <Navbar />
             <main className="flex-1 flex flex-col">{children}</main>
@@ -61,7 +76,7 @@ export default function RootLayout({
             <Toaster
               position="bottom-center"
               toastOptions={{
-                style: { background: '#F9F6EE', color: '#4A0404', borderColor: 'rgba(74, 4, 4, 0.1)', flexWrap: 'nowrap' }
+                style: { background: '#1A1A1A', color: '#F5F5F5', borderColor: 'rgba(245, 245, 245, 0.1)', flexWrap: 'nowrap' }
               }}
             />
           </CartProvider>

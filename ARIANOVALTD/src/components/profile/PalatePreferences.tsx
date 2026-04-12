@@ -48,8 +48,8 @@ export default function PalatePreferences({ initialPreferences, frequency }: { i
             onClick={() => togglePreference(item.id)}
             className={`px-4 py-2 border rounded-full flex items-center gap-2 transition-all ${
               isSelected 
-                ? 'border-[#4A0404] bg-[#4A0404] text-[#F9F6EE] shadow-md hover:bg-[#3A0303]' 
-                : 'border-[#4A0404]/20 text-[#4A0404]/70 hover:border-[#4A0404]/50 hover:bg-[#4A0404]/5'
+                ? 'border-brand-accent bg-brand-accent/10 text-brand-accent shadow-[0_0_15px_rgba(212,175,55,0.1)]' 
+                : 'border-brand-border/30 text-brand-foreground/60 hover:border-brand-accent/50 hover:bg-brand-surface/20'
             } disabled:opacity-50`}
           >
             <Icon className="w-4 h-4" />

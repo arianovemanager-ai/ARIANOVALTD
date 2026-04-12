@@ -13,16 +13,18 @@ export default function MembershipCard({ fullName, joinDate, orderCount }: Membe
   // Calculate dynamic threshold tiers seamlessly tracking Sanity payloads natively
   if (orderCount >= 6) {
     tier = "Gold"
-    gradient = "from-yellow-600 to-yellow-800"
+    gradient = "from-brand-surface to-[#2A2A2A] border-brand-accent/50 shadow-[0_0_30px_rgba(212,175,55,0.1)]"
   } else if (orderCount >= 3) {
     tier = "Silver"
-    gradient = "from-gray-300 to-gray-400"
+    gradient = "from-brand-surface to-[#222] border-brand-foreground/30 shadow-2xl"
+  } else {
+    gradient = "from-brand-surface to-[#151515] border-brand-border/50 shadow-xl"
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-sm p-8 text-white shadow-xl bg-gradient-to-br ${gradient}`}>
+    <div className={`relative overflow-hidden rounded-sm p-8 text-brand-foreground border bg-gradient-to-br ${gradient}`}>
       {/* Decorative Shimmer Layout Block */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent/5 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
       
       <div className="relative z-10 flex flex-col h-full justify-between">
         <div className="flex justify-between items-start mb-12">

@@ -7,12 +7,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         style={{ backgroundImage: "url('/images/vineyard_sunset_hero_1774069413207.png')" }}
       />
       {/* Soft dark burgundy overlay */}
-      <div className="absolute inset-0 bg-[#4A0404]/40 mix-blend-multiply pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a0101]/90 via-transparent to-[#1a0101]/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-brand-surface/40 mix-blend-multiply pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-brand-bg/60 pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md pt-12">
         <div className="text-center mb-8 flex flex-col items-center">
-          <h1 className="font-serif text-5xl md:text-6xl text-[#F5F5DC] tracking-[0.05em] mb-2 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">Arianova Estate</h1>
+          <h1 className="font-serif text-5xl md:text-6xl text-brand-accent tracking-[0.05em] mb-2 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">Arianova Estate</h1>
         </div>
 
         {children}

@@ -26,7 +26,7 @@ export default function WineGrid({ wines }: WineGridProps) {
   if (wines.length === 0) {
     return (
       <div className="flex flex-col items-center text-center py-20 w-full">
-        <p className="text-[#4A0404]/60 italic font-serif text-lg">
+        <p className="text-brand-foreground/60 italic font-serif text-lg">
           Our cellar is currently being restocked. Please check back shortly.
         </p>
       </div>

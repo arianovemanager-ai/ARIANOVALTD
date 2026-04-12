@@ -44,7 +44,7 @@ export default function EventList({ events }: { events: any[] }) {
 
   if (!events || events.length === 0) {
     return (
-      <div className="flex justify-center py-32 text-[#4A0404]/60 font-serif italic text-xl">
+      <div className="flex justify-center py-32 text-brand-foreground/60 font-serif italic text-xl">
         No upcoming experiences at this time.
       </div>
     );
@@ -75,37 +75,37 @@ export default function EventList({ events }: { events: any[] }) {
               {/* Text Block */}
               <div className="w-full md:w-1/2 flex flex-col justify-center px-4 md:px-12">
                 <div className="flex gap-4 items-center mb-6">
-                  <div className="px-3 py-1 border border-[#4A0404]/20 text-[#4A0404] text-xs uppercase tracking-[0.2em]">
+                  <div className="px-3 py-1 border border-brand-border/20 text-brand-foreground text-xs uppercase tracking-[0.2em]">
                     {eventDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </div>
-                  <span className="text-[#4A0404]/60 text-sm tracking-widest uppercase">{event.location}</span>
+                  <span className="text-brand-foreground/60 text-sm tracking-widest uppercase">{event.location}</span>
                 </div>
 
-                <h2 className="font-serif text-4xl md:text-5xl text-[#4A0404] mb-6 leading-tight">
+                <h2 className="font-serif text-4xl md:text-5xl text-brand-foreground mb-6 leading-tight">
                   {event.title}
                 </h2>
 
                 {/* Clean string fallback since rich text rendering is outside scope without sanity/portable-text */}
-                <p className="text-[#4A0404]/80 text-lg leading-relaxed font-light mb-10">
+                <p className="text-brand-foreground/80 text-lg leading-relaxed font-light mb-10">
                   Join us for an exclusive gathering. Reserve your placement.
                 </p>
 
-                <div className="border-t border-[#4A0404]/10 pt-8 flex items-center justify-between">
+                <div className="border-t border-brand-border/10 pt-8 flex items-center justify-between">
                   {event.price === 0 ? (
-                    <span className="text-xl font-serif text-[#4A0404]">Complimentary</span>
+                    <span className="text-xl font-serif text-brand-foreground">Complimentary</span>
                   ) : (
-                    <span className="text-xl font-serif text-[#4A0404]">${event.price / 100} USD</span>
+                    <span className="text-xl font-serif text-brand-foreground">${event.price / 100} USD</span>
                   )}
 
                   {isSoldOut ? (
-                    <span className="text-sm uppercase tracking-[0.2em] text-[#4A0404]/40 font-semibold px-6 py-3">
+                    <span className="text-sm uppercase tracking-[0.2em] text-brand-foreground/40 font-semibold px-6 py-3">
                       At Capacity
                     </span>
                   ) : (
                     <button
                       onClick={() => handleFastCheckout(event)}
                       disabled={loadingId === event._id}
-                      className="px-8 py-3 bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] disabled:opacity-50 transition-all text-xs font-semibold uppercase tracking-[0.2em]"
+                      className="px-8 py-3 bg-brand-accent text-brand-bg hover:bg-brand-accent/90 disabled:opacity-50 transition-all text-xs font-semibold uppercase tracking-[0.2em] shadow-lg shadow-brand-accent/10"
                     >
                       {loadingId === event._id ? 'Securing...' : 'RSVP'}
                     </button>

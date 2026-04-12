@@ -41,8 +41,8 @@ export default function AddToCartButton({ wine, available }: AddToCartButtonProp
         onClick={handleAdd}
         className={`px-10 py-5 tracking-[0.2em] text-xs font-bold uppercase rounded-sm w-full shadow-md
           ${isSoldOut 
-            ? 'bg-[#EAE6D9] text-[#4A0404]/40 cursor-not-allowed' 
-            : 'transition-colors bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] hover:shadow-lg'}`}
+            ? 'bg-brand-surface text-brand-foreground/40 cursor-not-allowed' 
+            : 'transition-colors bg-brand-surface text-brand-foreground hover:bg-brand-accent/80 hover:shadow-lg'}`}
       >
         {isSoldOut ? "Sold Out" : "Add to My Curation"}
       </motion.button>

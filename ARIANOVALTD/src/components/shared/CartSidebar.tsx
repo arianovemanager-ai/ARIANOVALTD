@@ -56,14 +56,14 @@ export default function CartSidebar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#F9F6EE] shadow-2xl z-[101] flex flex-col border-l border-[#4A0404]/10"
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-brand-bg shadow-2xl z-[101] flex flex-col border-l border-brand-border/10"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#4A0404]/10 bg-white/50">
-              <h2 className="font-serif text-2xl text-[#4A0404] tracking-wide">Your Cellar</h2>
+            <div className="flex items-center justify-between p-6 border-b border-brand-border/10 bg-white/50">
+              <h2 className="font-serif text-2xl text-brand-foreground tracking-wide">Your Cellar</h2>
               <button 
                 onClick={closeCart}
-                className="p-2 text-[#4A0404]/60 hover:text-[#4A0404] transition-colors rounded-full hover:bg-black/5"
+                className="p-2 text-brand-foreground/60 hover:text-brand-foreground transition-colors rounded-full hover:bg-black/5"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -73,8 +73,8 @@ export default function CartSidebar() {
             <div className="flex-1 overflow-y-auto p-6">
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center opacity-70">
-                  <p className="font-serif text-lg text-[#4A0404] mb-2">Your selection is empty</p>
-                  <p className="text-xs uppercase tracking-widest text-[#4A0404]/60">Explore vintages to begin</p>
+                  <p className="font-serif text-lg text-brand-foreground mb-2">Your selection is empty</p>
+                  <p className="text-xs uppercase tracking-widest text-brand-foreground/60">Explore vintages to begin</p>
                 </div>
               ) : (
                 <ul className="flex flex-col gap-6">
@@ -86,38 +86,38 @@ export default function CartSidebar() {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                        className="flex gap-4 border-b border-[#4A0404]/10 pb-6"
+                        className="flex gap-4 border-b border-brand-border/10 pb-6"
                       >
-                        <div className="relative w-20 h-28 bg-[#F5F5DC]/80 rounded-sm overflow-hidden flex-shrink-0">
+                        <div className="relative w-20 h-28 bg-brand-surface/80 rounded-sm overflow-hidden flex-shrink-0">
                           {item.imageUrl ? (
                             <Image src={item.imageUrl} alt={item.title} fill className="object-cover" sizes="80px" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[#4A0404]/30 font-serif text-xs">No Image</div>
+                            <div className="w-full h-full flex items-center justify-center text-brand-foreground/30 font-serif text-xs">No Image</div>
                           )}
                         </div>
                         
                         <div className="flex-1 flex flex-col justify-between">
                           <div>
-                            <h3 className="font-serif text-lg text-[#4A0404] leading-tight mb-1">{item.title}</h3>
-                            <p className="text-[10px] font-semibold tracking-widest text-[#4A0404]/60 uppercase">
+                            <h3 className="font-serif text-lg text-brand-foreground leading-tight mb-1">{item.title}</h3>
+                            <p className="text-[10px] font-semibold tracking-widest text-brand-foreground/60 uppercase">
                               ${(item.price / 100).toFixed(2)}
                             </p>
                           </div>
                           
                           <div className="flex items-center justify-between mt-4">
-                            <div className="flex items-center border border-[#4A0404]/20 rounded-sm overflow-hidden bg-white/50">
+                            <div className="flex items-center border border-brand-border/20 rounded-sm overflow-hidden bg-white/50">
                               <button 
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                className="px-2 py-1 flex items-center justify-center hover:bg-[#4A0404]/5 text-[#4A0404]/60 hover:text-[#4A0404]"
+                                className="px-2 py-1 flex items-center justify-center hover:bg-brand-surface/5 text-brand-foreground/60 hover:text-brand-foreground"
                               >
                                 <Minus className="w-3 h-3" />
                               </button>
-                              <span className="w-6 text-center text-xs font-semibold text-[#4A0404]">
+                              <span className="w-6 text-center text-xs font-semibold text-brand-foreground">
                                 {item.quantity}
                               </span>
                               <button 
                                 onClick={() => updateQuantity(item.id, Math.min(60, item.quantity + 1))}
-                                className="px-2 py-1 flex items-center justify-center hover:bg-[#4A0404]/5 text-[#4A0404]/60 hover:text-[#4A0404]"
+                                className="px-2 py-1 flex items-center justify-center hover:bg-brand-surface/5 text-brand-foreground/60 hover:text-brand-foreground"
                               >
                                 <Plus className="w-3 h-3" />
                               </button>
@@ -125,7 +125,7 @@ export default function CartSidebar() {
 
                             <button
                               onClick={() => removeFromCart(item.id)}
-                              className="text-[#4A0404]/40 hover:text-[#4A0404] transition-colors p-1"
+                              className="text-brand-foreground/40 hover:text-brand-foreground transition-colors p-1"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -140,16 +140,16 @@ export default function CartSidebar() {
 
             {/* Footer */}
             {cart.length > 0 && (
-              <div className="p-6 bg-white border-t border-[#4A0404]/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
+              <div className="p-6 bg-white border-t border-brand-border/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
                 <div className="flex justify-between items-center mb-6">
-                  <span className="font-serif text-lg text-[#4A0404]/80">Total</span>
-                  <span className="font-serif text-2xl text-[#4A0404] font-semibold">${(totalPrice / 100).toFixed(2)}</span>
+                  <span className="font-serif text-lg text-brand-foreground/80">Total</span>
+                  <span className="font-serif text-2xl text-brand-foreground font-semibold">${(totalPrice / 100).toFixed(2)}</span>
                 </div>
                 <motion.button 
                   whileTap={{ scale: 0.98 }}
                   onClick={handleCheckout}
                   disabled={isCheckingOut}
-                  className="w-full py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-[#4A0404] text-[#F9F6EE] hover:bg-[#3A0303] disabled:opacity-70 flex justify-center items-center gap-3"
+                  className="w-full py-4 tracking-[0.2em] text-xs font-bold uppercase transition-colors rounded-sm shadow-md bg-brand-surface text-brand-foreground hover:bg-brand-accent/80 disabled:opacity-70 flex justify-center items-center gap-3"
                 >
                   {isCheckingOut ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</> : "Checkout"}
                 </motion.button>
