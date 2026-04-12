@@ -4,6 +4,20 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Arianova Estate')
     .items([
+      // 0. Hero Experiences (Singleton Settings)
+      S.listItem()
+        .title('Hero Experiences')
+        .id('siteSettings')
+        .icon(() => '✨')
+        .child(
+          S.document()
+            .schemaType('siteSettings')
+            .documentId('siteSettings')
+            .title('Hero Experiences')
+        ),
+      
+      S.divider(),
+
       // 1. Inventory Monitor (Custom Filters)
       S.listItem()
         .title('Inventory Monitor')
@@ -19,6 +33,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title('Out of Stock')
                     .filter('_type == "wine" && physical_stock <= 0')
+                    .apiVersion('2024-04-12')
                 ),
               S.listItem()
                 .title('⚠️ Low Stock')
@@ -28,6 +43,7 @@ export const structure: StructureResolver = (S) =>
                     .title('Low Stock Alerts')
                     // physical_stock - committed_stock < low_stock_alert
                     .filter('_type == "wine" && (physical_stock - committed_stock) < low_stock_alert && physical_stock > 0')
+                    .apiVersion('2024-04-12')
                 ),
               S.listItem()
                 .title('💎 High Value Vintages')
@@ -36,6 +52,7 @@ export const structure: StructureResolver = (S) =>
                   S.documentList()
                     .title('High Value Vintages')
                     .filter('_type == "wine"')
+                    .apiVersion('2024-04-12')
                     .defaultOrdering([{ field: 'price', direction: 'desc' }])
                 ),
             ])
@@ -52,6 +69,7 @@ export const structure: StructureResolver = (S) =>
           S.documentList()
             .title('Recent Orders')
             .filter('_type == "order"')
+            .apiVersion('2024-04-12')
             // Sort by creation date so the newest orders pop to the top natively
             .defaultOrdering([{ field: '_createdAt', direction: 'desc' }])
         ),
@@ -59,8 +77,8 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
 
       // 3. Automatically map the rest of the generic documents (Customer, exact Wine creation, etc)
-      // But hide the generic 'order' list since we just built a better one uniquely for 'Recent Sales'
+      // But hide the generic 'order' list and the 'siteSettings' singleton
       ...S.documentTypeListItems().filter(
-        (item) => !['order'].includes(item.getId() as string)
+        (item) => !['order', 'siteSettings'].includes(item.getId() as string)
       ),
     ])

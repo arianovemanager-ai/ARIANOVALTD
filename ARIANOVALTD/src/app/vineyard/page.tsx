@@ -1,28 +1,34 @@
 import FadeInView from "@/components/shared/FadeInView"
 import Link from "next/link"
 import Image from "next/image"
+import VideoBackground from "@/components/shared/VideoBackground"
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries"
+import { sanityFetch } from "@/sanity/lib/fetch"
 
-export default function VineyardPage() {
+export default async function VineyardPage() {
+  const settings = await sanityFetch<any>({ query: SITE_SETTINGS_QUERY });
+  
+  // Fallbacks
+  const headline = settings?.vineyardHeadline || "Partner Estates";
+  const videoUrl = settings?.vineyardVideoUrl || "/media/Panoramic_side.mp4";
+  const posterUrl = settings?.vineyardPosterUrl || "";
+
   return (
     <div className="w-full bg-brand-bg">
       {/* 1. The Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        <Image 
-          src="/images/vineyard_noir_hero.png"
-          alt="Arianova Estate Vineyard at Sunset"
-          fill
-          priority
-          className="object-cover object-center"
-          quality={95}
+        <VideoBackground 
+          src={videoUrl} 
+          overlayOpacity={0.5} 
+          poster={posterUrl}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-brand-bg z-10" />
         
         <FadeInView direction="up" delay={0.2} duration={0.8} className="relative z-20 text-center px-6">
           <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] text-brand-foreground/80 mb-6 font-semibold">
             Arianova Curators
           </p>
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-brand-foreground tracking-wide drop-shadow-2xl mb-8">
-            Partner Estates
+            {headline}
           </h1>
         </FadeInView>
       </section>

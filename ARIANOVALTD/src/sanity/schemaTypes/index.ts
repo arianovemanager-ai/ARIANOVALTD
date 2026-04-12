@@ -4,7 +4,8 @@ import { userType } from './userType'
 import { orderType } from './orderType'
 import { sessionRecordType } from './sessionRecordType'
 import { eventType } from './eventType'
+import { siteSettingsType } from './siteSettingsType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [wineType, userType, orderType, sessionRecordType, eventType],
+  types: [wineType, userType, orderType, sessionRecordType, eventType, siteSettingsType],
 }

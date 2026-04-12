@@ -37,3 +37,13 @@ export const EVENTS_QUERY = groq`*[_type == "event" && date >= now()] | order(da
   physical_stock,
   committed_stock
 }`;
+
+export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings" && _id == "siteSettings"][0] {
+  homeHeadline,
+  homeSubheadline,
+  "homeVideoUrl": homeVideo.asset->url,
+  "homePosterUrl": homePoster.asset->url,
+  vineyardHeadline,
+  "vineyardVideoUrl": vineyardVideo.asset->url,
+  "vineyardPosterUrl": vineyardPoster.asset->url
+}`;
