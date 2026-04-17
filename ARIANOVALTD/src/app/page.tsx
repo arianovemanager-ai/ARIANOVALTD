@@ -25,12 +25,12 @@ export default async function Home() {
     <div className="flex-1 flex flex-col bg-brand-bg">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center text-center px-6 min-h-screen overflow-hidden">
-        <VideoBackground 
-          src={videoUrl} 
+        <VideoBackground
+          src={videoUrl}
           poster={posterUrl}
-          overlayOpacity={0.65} 
+          overlayOpacity={0.65}
         />
-        
+
         <div className="max-w-3xl flex flex-col items-center relative z-20">
           <FadeInView direction="up">
             <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-6">
@@ -43,7 +43,7 @@ export default async function Home() {
               {subheadline}
             </p>
             <ScrollLink href="#wines">
-              <MotionButton 
+              <MotionButton
                 whileTap={{ scale: 0.98 }}
                 className="px-10 py-4 bg-brand-surface text-brand-foreground tracking-widest text-xs font-semibold uppercase hover:bg-brand-accent/80 transition-all rounded-sm shadow-md hover:shadow-lg"
               >
@@ -77,7 +77,7 @@ export default async function Home() {
           </h2>
         </div>
 
-          <WineGrid wines={wines} />
+        <WineGrid wines={wines} />
       </section>
     </div>
   );

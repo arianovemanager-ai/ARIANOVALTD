@@ -1,4 +1,9 @@
+@layer theme, base, clerk, components, utilities;
 @import "tailwindcss";
+
+@layer clerk {
+  /* This layer will be used by Clerk to inject its styles correctly within the Tailwind v4 cascade */
+}
 
 :root {
   --background: #0B0B0B;
@@ -7,8 +12,22 @@
   --brand-bg: #0B0B0B;
   --brand-foreground: #F5F5F5;
   --brand-surface: #1A1A1A;
-  --brand-accent: #D4AF37;
+  --brand-accent: #C5A059;
   --brand-border: rgba(245, 245, 245, 0.1);
+}
+
+/* Hard-override for Clerk "Last Used" badge */
+[class*="cl-socialButtonsBlockButtonBadge"], 
+[class*="cl-badge"],
+.cl-button[class*="google"] [class*="Badge"],
+.cl-socialButtonsBlockButton [class*="cl-badge"] {
+  background-color: #C5A059 !important;
+  color: #0B0B0B !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
 }
 
 @theme inline {

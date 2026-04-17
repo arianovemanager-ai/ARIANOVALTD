@@ -70,12 +70,10 @@ export default async function DossierPage() {
           appearance={{
             elements: {
               card: "shadow-none border-none bg-transparent w-full max-w-none m-0",
-              navbar: "hidden", // Completely strips sidebars natively isolating specific components structurally
+              navbar: "hidden", // Completely strips sidebars natively
               pageScrollBox: "px-8 py-4",
               headerTitle: "hidden", 
               headerSubtitle: "hidden",
-              profileSectionTitleText: "text-[10px] font-bold tracking-widest uppercase text-brand-accent",
-              formButtonPrimary: "bg-brand-accent text-brand-bg hover:bg-brand-accent/90 text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-sm shadow-xl transition-all",
               profileSectionContent: "border-b border-brand-border pb-6 mb-6",
             }
           }}

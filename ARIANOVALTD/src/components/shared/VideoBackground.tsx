@@ -18,33 +18,31 @@ export default function VideoBackground({
 }: VideoBackgroundProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Fallback trigger: if video is already ready when component mounts
+  // Reset loading state when source changes
   useEffect(() => {
-    setIsLoaded(false); // Reset on source change
+    setIsLoaded(false);
   }, [src]);
 
-  const handleLoaded = () => setIsLoaded(true);
+  const handleLoaded = () => {
+    // Small delay to ensure the first frame is actually painted before we fade out the overlay
+    setTimeout(() => setIsLoaded(true), 150);
+  };
 
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden z-0 ${className}`}>
       {/* Video Element */}
       <video
         key={src}
-        ref={(el) => {
-          if (el && el.readyState >= 3) {
-            handleLoaded();
-          }
-        }}
         autoPlay
         muted
         loop
         playsInline
+        preload="auto"
         aria-hidden="true"
         tabIndex={-1}
         onLoadedData={handleLoaded}
         onCanPlay={handleLoaded}
-        onLoadedMetadata={handleLoaded}
-        className={`w-full h-full object-cover transition-opacity duration-1000 ${
+        className={`w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
         poster={poster}
@@ -54,7 +52,7 @@ export default function VideoBackground({
 
       {/* Noir Deep Dark Overlay */}
       <div 
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-10 transition-opacity duration-1000"
         style={{ 
           background: `linear-gradient(to bottom, rgba(11, 11, 11, ${overlayOpacity}), rgba(11, 11, 11, ${overlayOpacity + 0.1}))`,
           backdropFilter: "contrast(110%) brightness(90%)" 
@@ -62,19 +60,19 @@ export default function VideoBackground({
       />
       
       {/* Subtle Vignette for that premium feel */}
-      <div className="absolute inset-0 z-15 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
+      <div className="absolute inset-0 z-[11] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
       
       {/* Noise Grain Overlay for texture */}
-      <div className="absolute inset-0 z-[16] opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
+      <div className="absolute inset-0 z-[12] opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
 
-      {/* Fallback/Initial state while loading */}
+      {/* Fallback/Initial state - Solid Obsidian background while loading */}
       <AnimatePresence>
         {!isLoaded && (
           <motion.div 
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-brand-bg z-20"
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0 bg-[#0B0B0B] z-20"
           />
         )}
       </AnimatePresence>

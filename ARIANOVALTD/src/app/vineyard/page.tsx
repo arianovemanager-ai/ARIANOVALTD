@@ -57,6 +57,7 @@ export default async function VineyardPage() {
               src="/images/grape_macro_noir.png"
               alt="Macro Grapes Tenute Dello Jato"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-transform duration-1000 hover:scale-105"
             />
           </FadeInView>
@@ -71,6 +72,7 @@ export default async function VineyardPage() {
               src="/images/cellar_editorial_noir.png"
               alt="Private Cellar Tenute Fosca"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover transition-transform duration-1000 hover:scale-105"
             />
           </FadeInView>

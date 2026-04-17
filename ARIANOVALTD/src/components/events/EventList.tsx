@@ -94,7 +94,7 @@ export default function EventList({ events }: { events: any[] }) {
                   {event.price === 0 ? (
                     <span className="text-xl font-serif text-brand-foreground">Complimentary</span>
                   ) : (
-                    <span className="text-xl font-serif text-brand-foreground">${event.price / 100} USD</span>
+                    <span className="text-xl font-serif text-brand-foreground">${(event.price / 100).toFixed(2)} NZD</span>
                   )}
 
                   {isSoldOut ? (

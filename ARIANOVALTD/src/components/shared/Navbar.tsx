@@ -40,7 +40,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex gap-10 text-xs font-semibold uppercase tracking-widest text-brand-foreground/80">
+        <nav className="hidden lg:flex gap-6 xl:gap-10 text-xs font-semibold uppercase tracking-widest text-brand-foreground/80 whitespace-nowrap">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="hover:text-white transition-colors">
               {link.name}
@@ -49,7 +49,7 @@ export default function Navbar() {
         </nav>
 
         {/* Actions & Hamburger */}
-        <div className="flex items-center gap-4 md:gap-6 relative z-[60]">
+        <div className="flex items-center gap-4 lg:gap-6 relative z-[60]">
           <button onClick={openCart} className="relative text-brand-foreground/80 hover:text-white transition-colors focus:outline-none">
             <ShoppingCart className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
             {isHydrated && totalItems > 0 && (
@@ -67,7 +67,7 @@ export default function Navbar() {
           </ClerkLoading>
 
           <ClerkLoaded>
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-6 whitespace-nowrap">
               {!userId ? (
                 <>
                   <Link href="/sign-in" className="text-xs font-semibold uppercase tracking-widest text-brand-foreground/80 hover:text-white transition-colors">
@@ -93,7 +93,7 @@ export default function Navbar() {
             {/* Mobile Menu Toggle */}
             <button 
               onClick={toggleMenu} 
-              className="md:hidden text-brand-foreground p-2 focus:outline-none"
+              className="lg:hidden text-brand-foreground p-2 focus:outline-none"
               aria-label="Toggle Menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -110,7 +110,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: '100vh' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 top-0 z-50 bg-brand-surface md:hidden overflow-hidden flex flex-col pt-32 px-10 pb-10"
+            className="fixed inset-0 top-0 z-50 bg-brand-surface lg:hidden overflow-hidden flex flex-col pt-32 px-10 pb-10"
           >
             <nav className="flex flex-col gap-8 mb-12">
               {navLinks.map((link, idx) => (
