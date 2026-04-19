@@ -64,6 +64,7 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
           {/* Right Column: Details */}
           <div className="flex flex-col pt-8 md:pt-16 md:sticky md:top-32">
             <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-4">
+              {wine.winery && <span className="block mb-1 text-brand-accent">{wine.winery}</span>}
               {wine.vintage ? `Vintage ${wine.vintage}` : "Non-Vintage"}
             </h2>
             <h1 className="font-serif text-4xl md:text-5xl text-brand-foreground mb-4 tracking-wide leading-tight">
@@ -82,6 +83,28 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
                 <p>Tasting notes for this vintage are currently being curated by our sommeliers.</p>
               )}
             </div>
+
+            {/* Technical Specifications */}
+            {(wine.grapeVarieties || wine.alcoholContent) && (
+              <div className="mb-12 border-t border-brand-border/10 pt-6">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-brand-foreground/60 mb-4">Specifications</h3>
+                <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
+                  {wine.grapeVarieties && (
+                    <div>
+                      <dt className="text-brand-foreground/50 uppercase tracking-widest text-[10px]">Grape Varieties</dt>
+                      <dd className="font-serif text-brand-foreground/90 mt-1">{wine.grapeVarieties}</dd>
+                    </div>
+                  )}
+                  {wine.alcoholContent && (
+                    <div>
+                      <dt className="text-brand-foreground/50 uppercase tracking-widest text-[10px]">Alcohol Content</dt>
+                      <dd className="font-serif text-brand-foreground/90 mt-1">{wine.alcoholContent}% Vol.</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            )}
+
 
             {/* Purchase Action intercepting constraints natively */}
             <AddToCartButton wine={wine} available={available} />

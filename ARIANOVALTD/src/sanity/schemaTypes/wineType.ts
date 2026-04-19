@@ -9,13 +9,18 @@ export const wineType = defineType({
     defineField({ name: 'title', title: 'Title', type: 'string', validation: (Rule) => Rule.required() }),
     defineField({ name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title' } }),
     defineField({ name: 'sku', title: 'SKU', type: 'string', validation: (Rule) => Rule.required() }),
+    defineField({ name: 'winery', title: 'Winery', type: 'string', description: 'Originating estate (e.g., Tenute dello Jato)' }),
+    defineField({ name: 'vintage', title: 'Vintage', type: 'number' }),
+    defineField({ name: 'grapeVarieties', title: 'Grape Varieties', type: 'string' }),
+    defineField({ name: 'alcoholContent', title: 'Alcohol Content', type: 'number', description: 'Alcohol by volume (%)' }),
     defineField({ name: 'price', title: 'Price (in Cents)', type: 'number', description: 'Store in cents for Stripe (e.g., $45.00 = 4500)' }),
     defineField({ name: 'tastingNotes', title: 'Tasting Notes', type: 'array', of: [{ type: 'block' }] }),
     defineField({
       name: 'images',
       title: 'Images',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }], // Hotspot allows admins to crop easily
+      of: [{ type: 'image', options: { hotspot: true } }],
+      description: 'ARIANOVA NOIR STYLE GUIDE: Use portrait shots with a 3:4 aspect ratio (Recommended: 1200x1600px). Background should be pure obsidian (#050505) or transparent. Ensure the bottle is centered with sharp labels and studio lighting that highlights glass curves.'
     }),
     
     // Logistics & State Management

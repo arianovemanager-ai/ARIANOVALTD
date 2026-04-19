@@ -32,9 +32,10 @@ export default function WineCard({ wine }: WineCardProps) {
     >
       <motion.div 
         className="relative aspect-[3/4] w-full overflow-hidden bg-brand-surface border border-brand-border/30 rounded-sm"
+        initial={{ borderColor: "rgba(245, 245, 245, 0.03)" }}
         whileHover={{ 
           boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.8)",
-          borderColor: "rgba(212, 175, 55, 0.4)" 
+          borderColor: "rgba(197, 160, 89, 0.4)" 
         }}
       >
         {wine.imageUrl ? (

@@ -25,23 +25,23 @@ export default function AddToCartButton({ wine, available }: AddToCartButtonProp
       price: wine.price,
       imageUrl: wine.imageUrl,
     })
-    
+
     // Premium Toast Hook
-    toast.success('Vintage Secured', {
-      description: `${wine.title} has been added to your curated selection.`,
+    toast.success('Bottle Secured', {
+      description: `${wine.title} has been added to your cart selection.`,
       duration: 3500,
     })
   }
 
   return (
     <div className="w-full md:w-auto relative">
-      <motion.button 
+      <motion.button
         whileTap={!isSoldOut ? { scale: 0.98 } : {}}
         disabled={isSoldOut}
         onClick={handleAdd}
         className={`px-10 py-5 tracking-[0.2em] text-xs font-bold uppercase rounded-sm w-full shadow-md
-          ${isSoldOut 
-            ? 'bg-brand-surface text-brand-foreground/40 cursor-not-allowed' 
+          ${isSoldOut
+            ? 'bg-brand-surface text-brand-foreground/40 cursor-not-allowed'
             : 'transition-colors bg-brand-surface text-brand-foreground hover:bg-brand-accent/80 hover:shadow-lg'}`}
       >
         {isSoldOut ? "Sold Out" : "Add to My Curation"}

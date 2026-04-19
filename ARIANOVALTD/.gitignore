@@ -41,9 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 # Local Administration & Data Population Scripts
-seed.mjs
-seed-italian-wines.mjs
-upload-images.mjs
+/scripts/
 rename.js
 test-suite-analysis.txt
 tmp

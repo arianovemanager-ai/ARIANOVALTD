@@ -20,6 +20,9 @@ export const SINGLE_WINE_QUERY = groq`*[_type == "wine" && slug.current == $slug
   price,
   vintage,
   tastingNotes,
+  winery,
+  grapeVarieties,
+  alcoholContent,
   "imageUrl": images[0].asset->url,
   physical_stock,
   committed_stock
