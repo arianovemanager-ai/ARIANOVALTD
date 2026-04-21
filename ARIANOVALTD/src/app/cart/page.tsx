@@ -7,6 +7,7 @@ import { Trash2, Plus, Minus, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { urlFor } from "@/sanity/lib/image"
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, totalPrice, isHydrated } = useCart()
@@ -67,19 +68,24 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Cart Items List */}
           <div className="lg:col-span-2 flex flex-col gap-8">
-            {cart.map((item) => (
-              <div key={item.id} className="flex flex-col sm:flex-row gap-8 items-center sm:items-start border-b border-brand-border/10 pb-8">
-                
-                {/* Image */}
-                <div className="relative w-32 h-44 bg-brand-surface/80 rounded-sm overflow-hidden flex-shrink-0 shadow-sm">
-                  {item.imageUrl ? (
-                    <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-brand-foreground/30 font-serif text-sm">
-                      No Image
-                    </div>
-                  )}
-                </div>
+            {cart.map((item) => {
+              const displayImageUrl = item.imageObj 
+                ? urlFor(item.imageObj).width(300).height(400).url()
+                : item.imageUrl;
+
+              return (
+                <div key={item.id} className="flex flex-col sm:flex-row gap-8 items-center sm:items-start border-b border-brand-border/10 pb-8">
+                  
+                  {/* Image */}
+                  <div className="relative w-32 h-44 bg-brand-surface/80 rounded-sm overflow-hidden flex-shrink-0 shadow-sm">
+                    {displayImageUrl ? (
+                      <Image src={displayImageUrl} alt={item.title} fill className="object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-brand-foreground/30 font-serif text-sm">
+                        No Image
+                      </div>
+                    )}
+                  </div>
 
                 {/* Details */}
                 <div className="flex-1 flex flex-col items-center sm:items-start text-center sm:text-left w-full h-full justify-between">
@@ -129,8 +135,9 @@ export default function CartPage() {
                     ${((item.price * item.quantity) / 100).toFixed(2)}
                   </p>
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
 
           {/* Checkout Summary */}

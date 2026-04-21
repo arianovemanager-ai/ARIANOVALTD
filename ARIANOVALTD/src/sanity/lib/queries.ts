@@ -8,6 +8,7 @@ export const WINE_QUERY = groq`*[_type == "wine"] | order(_createdAt desc) {
   price,
   vintage,
   "imageUrl": images[0].asset->url,
+  "imageObj": images[0],
   physical_stock,
   committed_stock
 }`;
@@ -24,6 +25,7 @@ export const SINGLE_WINE_QUERY = groq`*[_type == "wine" && slug.current == $slug
   grapeVarieties,
   alcoholContent,
   "imageUrl": images[0].asset->url,
+  "imageObj": images[0],
   physical_stock,
   committed_stock
 }`;
@@ -37,6 +39,7 @@ export const EVENTS_QUERY = groq`*[_type == "event" && date >= now()] | order(da
   price,
   description,
   "imageUrl": images[0].asset->url,
+  "imageObj": images[0],
   physical_stock,
   committed_stock
 }`;

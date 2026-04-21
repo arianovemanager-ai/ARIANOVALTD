@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { SINGLE_WINE_QUERY } from "@/sanity/lib/queries";
 import AddToCartButton from "@/components/shared/AddToCartButton";
+import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 0; // Absolute SSR Precision enforcing backend reads upon reload
 
@@ -22,19 +23,23 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
   const available = (wine.physical_stock || 0) - (wine.committed_stock || 0);
   const isSoldOut = available <= 0;
 
+  const displayImageUrl = wine.imageObj 
+    ? urlFor(wine.imageObj).width(1200).url() 
+    : wine.imageUrl;
+
   return (
     <div className="min-h-screen bg-brand-bg pt-10 pb-24">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-start">
           
           {/* Left Column: Image */}
-          <div className="relative aspect-[3/4] w-full bg-brand-surface/50 rounded-sm overflow-hidden shadow-sm border border-brand-border/5">
-            {wine.imageUrl ? (
+          <div className="relative aspect-[3/4] w-full bg-black rounded-sm overflow-hidden shadow-sm border border-brand-border/5">
+            {displayImageUrl ? (
               <Image
-                src={wine.imageUrl}
+                src={displayImageUrl}
                 alt={wine.title}
                 fill
-                className="object-cover"
+                className="object-contain p-12"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />

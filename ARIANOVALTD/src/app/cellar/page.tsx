@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Wine } from "lucide-react"
 import StatusIcon from "@/components/shared/StatusIcon"
+import { urlFor } from "@/sanity/lib/image"
 
 // Ensure zero caching on private encrypted customer profiles securely
 export const revalidate = 0 
@@ -23,7 +24,8 @@ const ORDERS_QUERY = groq`*[_type == "order" && customer._ref == $customerId] | 
     "wine": wine->{
       title,
       vintage,
-      "imageUrl": images[0].asset->url
+      "imageUrl": images[0].asset->url,
+      "imageObj": images[0]
     }
   }
 }`
@@ -115,33 +117,39 @@ export default async function CellarPage() {
                     Acquired Vintages
                   </h3>
                   <div className="flex flex-col gap-6">
-                    {order.items?.map((item: any, idx: number) => (
-                      <div key={idx} className="flex items-center gap-5">
-                        <div className="relative w-14 h-20 bg-brand-bg border border-brand-border/10 rounded-sm overflow-hidden flex-shrink-0">
-                          {item.wine?.imageUrl ? (
-                            <Image 
-                              src={item.wine.imageUrl} 
-                              alt={item.wine?.title || 'Arianova Vintage'} 
-                              fill 
-                              className="object-cover" 
-                              sizes="56px" 
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-brand-foreground/20">
-                              <Wine className="w-5 h-5" />
-                            </div>
-                          )}
+                    {order.items?.map((item: any, idx: number) => {
+                      const displayImageUrl = item.wine?.imageObj 
+                        ? urlFor(item.wine.imageObj).width(200).height(200).url()
+                        : item.wine?.imageUrl;
+                        
+                      return (
+                        <div key={idx} className="flex items-center gap-5">
+                          <div className="relative w-14 h-20 bg-brand-bg border border-brand-border/10 rounded-sm overflow-hidden flex-shrink-0">
+                            {displayImageUrl ? (
+                              <Image 
+                                src={displayImageUrl} 
+                                alt={item.wine?.title || 'Arianova Vintage'} 
+                                fill 
+                                className="object-cover" 
+                                sizes="56px" 
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-brand-foreground/20">
+                                <Wine className="w-5 h-5" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-serif text-lg text-brand-foreground">
+                              {item.wine?.title} {item.wine?.vintage && <span className="opacity-70 text-base">({item.wine.vintage})</span>}
+                            </p>
+                            <p className="text-[10px] uppercase font-bold tracking-widest text-brand-foreground/60 mt-1">
+                              Qty: {item.quantity}  <span className="px-2 opacity-50">|</span>  ${(item.priceAtPurchase / 100).toFixed(2)} each
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <p className="font-serif text-lg text-brand-foreground">
-                            {item.wine?.title} {item.wine?.vintage && <span className="opacity-70 text-base">({item.wine.vintage})</span>}
-                          </p>
-                          <p className="text-[10px] uppercase font-bold tracking-widest text-brand-foreground/60 mt-1">
-                            Qty: {item.quantity}  <span className="px-2 opacity-50">|</span>  ${(item.priceAtPurchase / 100).toFixed(2)} each
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
 

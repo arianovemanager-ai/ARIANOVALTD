@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { urlFor } from "@/sanity/lib/image";
 
 interface WineCardProps {
   wine: {
@@ -12,6 +13,7 @@ interface WineCardProps {
     price: number;
     vintage: number | null;
     imageUrl: string | null;
+    imageObj?: any;
     physical_stock: number;
     committed_stock: number;
   };
@@ -23,6 +25,10 @@ export default function WineCard({ wine }: WineCardProps) {
 
   const MotionLink = motion.create(Link);
 
+  const displayImageUrl = wine.imageObj 
+    ? urlFor(wine.imageObj).width(800).url() // Let Sanity determine height based on original aspect ratio/crop
+    : wine.imageUrl;
+
   return (
     <MotionLink 
       href={`/wines/${wine.slug}`} 
@@ -31,19 +37,19 @@ export default function WineCard({ wine }: WineCardProps) {
       style={{ WebkitTapHighlightColor: "transparent" }}
     >
       <motion.div 
-        className="relative aspect-[3/4] w-full overflow-hidden bg-brand-surface border border-brand-border/30 rounded-sm"
+        className="relative aspect-[3/4] w-full overflow-hidden bg-black border border-brand-border/30 rounded-sm"
         initial={{ borderColor: "rgba(245, 245, 245, 0.03)" }}
         whileHover={{ 
           boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.8)",
           borderColor: "rgba(197, 160, 89, 0.4)" 
         }}
       >
-        {wine.imageUrl ? (
+        {displayImageUrl ? (
           <Image
-            src={wine.imageUrl}
+            src={displayImageUrl}
             alt={wine.title}
             fill
-            className={`object-cover transition-all duration-1000 group-hover:scale-110 ${isSoldOut ? 'opacity-80 grayscale sm:grayscale-0' : ''}`}
+            className={`object-contain transition-all duration-1000 group-hover:scale-105 p-6 ${isSoldOut ? 'opacity-80 grayscale sm:grayscale-0' : ''}`}
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (

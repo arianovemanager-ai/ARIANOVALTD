@@ -6,6 +6,7 @@ import { X, Trash2, Plus, Minus, Loader2 } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
 import { toast } from "sonner"
+import { urlFor } from "@/sanity/lib/image"
 
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, totalPrice, isCartOpen, closeCart, isHydrated } = useCart()
@@ -79,30 +80,35 @@ export default function CartSidebar() {
               ) : (
                 <ul className="flex flex-col gap-6">
                   <AnimatePresence mode="popLayout">
-                    {cart.map((item) => (
-                      <motion.li
-                        key={item.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                        className="flex gap-4 border-b border-brand-border/10 pb-6"
-                      >
-                        <div className="relative w-20 h-28 bg-brand-surface/80 rounded-sm overflow-hidden flex-shrink-0">
-                          {item.imageUrl ? (
-                            <Image src={item.imageUrl} alt={item.title} fill className="object-cover" sizes="80px" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-brand-foreground/30 font-serif text-xs">No Image</div>
-                          )}
-                        </div>
-                        
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-serif text-lg text-brand-foreground leading-tight mb-1">{item.title}</h3>
-                            <p className="text-[10px] font-semibold tracking-widest text-brand-foreground/60 uppercase">
-                              ${(item.price / 100).toFixed(2)}
-                            </p>
+                    {cart.map((item) => {
+                      const displayImageUrl = item.imageObj 
+                        ? urlFor(item.imageObj).width(160).height(224).url()
+                        : item.imageUrl;
+
+                      return (
+                        <motion.li
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                          className="flex gap-4 border-b border-brand-border/10 pb-6"
+                        >
+                          <div className="relative w-20 h-28 bg-brand-surface/80 rounded-sm overflow-hidden flex-shrink-0">
+                            {displayImageUrl ? (
+                              <Image src={displayImageUrl} alt={item.title} fill className="object-cover" sizes="80px" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-brand-foreground/30 font-serif text-xs">No Image</div>
+                            )}
                           </div>
+                          
+                          <div className="flex-1 flex flex-col justify-between">
+                            <div>
+                              <h3 className="font-serif text-lg text-brand-foreground leading-tight mb-1">{item.title}</h3>
+                              <p className="text-[10px] font-semibold tracking-widest text-brand-foreground/60 uppercase">
+                                ${(item.price / 100).toFixed(2)}
+                              </p>
+                            </div>
                           
                           <div className="flex items-center justify-between mt-4">
                             <div className="flex items-center border border-brand-border/20 rounded-sm overflow-hidden bg-white/50">
@@ -131,8 +137,9 @@ export default function CartSidebar() {
                             </button>
                           </div>
                         </div>
-                      </motion.li>
-                    ))}
+                        </motion.li>
+                      );
+                    })}
                   </AnimatePresence>
                 </ul>
               )}
