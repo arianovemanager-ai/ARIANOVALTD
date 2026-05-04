@@ -90,7 +90,7 @@ export default function CartPage() {
                         src={displayImageUrl}
                         alt={item.title}
                         fill
-                        className={`${isWine ? 'object-contain p-2' : 'object-cover'} transition-opacity duration-500`}
+                        className={`${isWine ? 'object-contain p-4' : 'object-cover'} transition-opacity duration-500`}
                         sizes="128px"
                       />
                     ) : (

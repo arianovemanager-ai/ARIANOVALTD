@@ -61,7 +61,7 @@ export default function CartSidebar() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-brand-border/10 bg-white/80 backdrop-blur-md">
-              <h2 className="font-serif text-2xl text-brand-bg tracking-wide">Your Cellar</h2>
+              <h2 className="font-serif text-2xl text-brand-bg tracking-wide">Your Cart</h2>
               <button
                 onClick={closeCart}
                 className="p-2 text-brand-bg/60 hover:text-brand-bg transition-colors rounded-full hover:bg-black/5"
@@ -84,12 +84,12 @@ export default function CartSidebar() {
                       const isWine = item.type === 'wine';
                       const displayImageUrl = (item.imageObj && item.imageObj.asset)
                         ? urlFor(item.imageObj)
-                            .width(600)
-                            .height(800)
-                            .quality(100)
-                            .fit(isWine ? 'max' : 'crop')
-                            .auto('format')
-                            .url()
+                          .width(600)
+                          .height(800)
+                          .quality(100)
+                          .fit(isWine ? 'max' : 'crop')
+                          .auto('format')
+                          .url()
                         : item.imageUrl;
 
                       return (
@@ -124,29 +124,30 @@ export default function CartSidebar() {
                             </div>
 
                             <div className="flex items-center justify-between mt-4">
-                              <div className="flex items-center border border-brand-border/20 rounded-sm overflow-hidden bg-white/50">
+                              <div className="flex items-center border border-brand-border/10 rounded-sm overflow-hidden bg-brand-surface/40 backdrop-blur-sm">
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                  className="px-2 py-1 flex items-center justify-center hover:bg-brand-surface/5 text-brand-foreground/60 hover:text-brand-foreground"
+                                  className="px-2 py-1.5 flex items-center justify-center hover:bg-white/5 text-brand-foreground/40 hover:text-brand-foreground transition-colors"
                                 >
-                                  <Minus className="w-3 h-3" />
+                                  <Minus className="w-3 h-3" strokeWidth={2.5} />
                                 </button>
-                                <span className="w-6 text-center text-xs font-semibold text-brand-foreground">
+                                <span className="w-8 text-center text-[11px] font-bold text-brand-foreground tracking-tighter">
                                   {item.quantity}
                                 </span>
                                 <button
                                   onClick={() => updateQuantity(item.id, Math.min(60, item.quantity + 1))}
-                                  className="px-2 py-1 flex items-center justify-center hover:bg-brand-surface/5 text-brand-foreground/60 hover:text-brand-foreground"
+                                  className="px-2 py-1.5 flex items-center justify-center hover:bg-white/5 text-brand-foreground/40 hover:text-brand-foreground transition-colors"
                                 >
-                                  <Plus className="w-3 h-3" />
+                                  <Plus className="w-3 h-3" strokeWidth={2.5} />
                                 </button>
                               </div>
 
                               <button
                                 onClick={() => removeFromCart(item.id)}
-                                className="text-brand-foreground/40 hover:text-brand-foreground transition-colors p-1"
+                                className="text-brand-foreground/20 hover:text-brand-accent transition-colors p-2 group"
+                                aria-label="Remove item"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                               </button>
                             </div>
                           </div>
