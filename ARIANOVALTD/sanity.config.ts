@@ -16,3 +16,5 @@ export default defineConfig({
     structureTool({ structure }),
   ],
 });
+// Triggering build v2 after env check
+
