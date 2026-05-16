@@ -278,8 +278,7 @@ export async function createSalesPayment(payload: Cin7PaymentPayload): Promise<a
  */
 export async function getProductStock(sku: string): Promise<Cin7ProductAvailability | null> {
   try {
-    const params = new URLSearchParams({ Sku: sku });
-    const response = await fetch(`${DEAR_API_URL}/ProductAvailability?${params.toString()}`, {
+    const response = await fetch(`${DEAR_API_URL}/ref/productavailability?Sku=${sku}`, {
       method: 'GET',
       headers: getHeaders(),
     });
@@ -311,8 +310,7 @@ export async function getLiveCin7Stock(skus: string[]): Promise<Record<string, n
   // Note: Cin7 Rate Limits might be an issue if we have dozens of SKUs, 
   // but for a typical cart (1-10 items) this is the fastest way.
   await Promise.all(uniqueSkus.map(async (sku) => {
-    const params = new URLSearchParams({ Sku: sku });
-    const response = await fetch(`${DEAR_API_URL}/ProductAvailability?${params.toString()}`, {
+    const response = await fetch(`${DEAR_API_URL}/ref/productavailability?Sku=${sku}`, {
       method: 'GET',
       headers: getHeaders(),
     });

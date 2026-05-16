@@ -26,12 +26,13 @@ vi.mock('@/lib/cin7', () => ({
 describe('Cin7 Reverse Stock Sync Webhook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.CRON_SECRET = 'test_secret';
+    process.env.CIN7_WEBHOOK_SECRET = 'test_secret';
   });
 
   it('rejects unauthorized requests', async () => {
-    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock?secret=wrong', {
+    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock', {
       method: 'POST',
+      headers: { 'x-cin7-webhook-secret': 'wrong' },
       body: JSON.stringify({ SKU: 'test-wine' })
     });
 
@@ -40,8 +41,9 @@ describe('Cin7 Reverse Stock Sync Webhook', () => {
   });
 
   it('rejects payload without SKU', async () => {
-    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock?secret=test_secret', {
+    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock', {
       method: 'POST',
+      headers: { 'x-cin7-webhook-secret': 'test_secret' },
       body: JSON.stringify({ Event: 'StockAdjustment' }) // no sku
     });
 
@@ -52,8 +54,9 @@ describe('Cin7 Reverse Stock Sync Webhook', () => {
   it('returns 404 if SKU not found in Cin7', async () => {
     (getProductStock as any).mockResolvedValueOnce(null);
 
-    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock?secret=test_secret', {
+    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock', {
       method: 'POST',
+      headers: { 'x-cin7-webhook-secret': 'test_secret' },
       body: JSON.stringify({ SKU: 'fake-wine' })
     });
 
@@ -69,8 +72,9 @@ describe('Cin7 Reverse Stock Sync Webhook', () => {
     const mockWriteClient = client.withConfig({ token: 'mock' });
     (mockWriteClient.fetch as any).mockResolvedValueOnce({ _id: 'prod_123' });
 
-    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock?secret=test_secret', {
+    const req = new Request('http://localhost:3000/api/webhooks/cin7/stock', {
       method: 'POST',
+      headers: { 'x-cin7-webhook-secret': 'test_secret' },
       body: JSON.stringify({ SKU: 'real-wine' })
     });
 

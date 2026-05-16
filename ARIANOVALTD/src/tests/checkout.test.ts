@@ -21,6 +21,11 @@ vi.mock('@clerk/nextjs/server', () => ({
   auth: vi.fn().mockResolvedValue({ userId: 'test_user_123' }),
 }));
 
+// Mock Cin7 Live Stock to avoid hitting real APIs or failing env validation in tests
+vi.mock('@/lib/cin7', () => ({
+  getLiveCin7Stock: vi.fn().mockResolvedValue({ 'syrah-2021': 10 })
+}));
+
 // Mock Sanity Client
 vi.mock('@/sanity/lib/client', () => {
   const mPatch = vi.fn();
@@ -65,8 +70,13 @@ describe('Checkout Route - Optimistic Locking (secureStockLock)', () => {
 
   it('Happy Path: Successfully acquires lock on first attempt', async () => {
     // 1. Mock DB state
+    // Fetch 1: Get SKUs for live check
     mFetch.mockResolvedValueOnce([
-      { _id: 'wine_1', physical_stock: 10, committed_stock: 2, price: 5000, title: 'Syrah', _rev: 'rev_1' }
+      { _id: 'wine_1', sku: 'syrah-2021', title: 'Syrah' }
+    ]);
+    // Fetch 2: Get full details inside the retry loop
+    mFetch.mockResolvedValueOnce([
+      { _id: 'wine_1', _type: 'wine', physical_stock: 10, committed_stock: 2, price: 5000, title: 'Syrah', sku: 'syrah-2021', _rev: 'rev_1' }
     ]);
     mCommit.mockResolvedValueOnce({ success: true });
 
@@ -79,9 +89,10 @@ describe('Checkout Route - Optimistic Locking (secureStockLock)', () => {
     const response = await POST(req);
     
     // 3. Assert
-    expect(mFetch).toHaveBeenCalledTimes(1);
+    expect(mFetch).toHaveBeenCalledTimes(2); // 1 SKU fetch + 1 details fetch
     expect(mPatch).toHaveBeenCalledWith('wine_1', {
       ifRevisionID: 'rev_1',
+      setIfMissing: { committed_stock: 0 },
       inc: { committed_stock: 2 }
     });
     expect(mCommit).toHaveBeenCalledTimes(1);
@@ -89,9 +100,14 @@ describe('Checkout Route - Optimistic Locking (secureStockLock)', () => {
   });
 
   it('Optimistic Lock Failure: 409 Collision Recovery Loop', async () => {
-    // Attempt 1 Fetch
+    // Fetch 1: Get SKUs (called once outside retry loop)
     mFetch.mockResolvedValueOnce([
-      { _id: 'wine_1', physical_stock: 10, committed_stock: 2, price: 5000, title: 'Syrah', _rev: 'stale_rev' }
+      { _id: 'wine_1', sku: 'syrah-2021', title: 'Syrah' }
+    ]);
+
+    // Attempt 1 Fetch inside loop
+    mFetch.mockResolvedValueOnce([
+      { _id: 'wine_1', _type: 'wine', physical_stock: 10, committed_stock: 2, price: 5000, title: 'Syrah', sku: 'syrah-2021', _rev: 'stale_rev' }
     ]);
     
     // Attempt 1 Commit Fails with 409
@@ -99,9 +115,9 @@ describe('Checkout Route - Optimistic Locking (secureStockLock)', () => {
     (conflictError as any).statusCode = 409;
     mCommit.mockRejectedValueOnce(conflictError);
 
-    // Attempt 2 Fetch (New _rev)
+    // Attempt 2 Fetch inside loop (New _rev)
     mFetch.mockResolvedValueOnce([
-      { _id: 'wine_1', physical_stock: 10, committed_stock: 3, price: 5000, title: 'Syrah', _rev: 'fresh_rev' }
+      { _id: 'wine_1', _type: 'wine', physical_stock: 10, committed_stock: 3, price: 5000, title: 'Syrah', sku: 'syrah-2021', _rev: 'fresh_rev' }
     ]);
     
     // Attempt 2 Commit Succeeds
@@ -115,12 +131,13 @@ describe('Checkout Route - Optimistic Locking (secureStockLock)', () => {
     const response = await POST(req);
 
     // Assertions
-    expect(mFetch).toHaveBeenCalledTimes(2); // Verified re-fetch loop
+    expect(mFetch).toHaveBeenCalledTimes(3); // 1 SKU fetch + 2 Loop fetches
     expect(mPatch).toHaveBeenCalledTimes(2);
     
     // Verify Attempt 2 used the new _rev
     expect(mPatch).toHaveBeenLastCalledWith('wine_1', {
       ifRevisionID: 'fresh_rev',
+      setIfMissing: { committed_stock: 0 },
       inc: { committed_stock: 1 }
     });
     
