@@ -3,11 +3,9 @@
 
 ## 🔐 Security & Secrets
 - [x] Replace `CIN7_DEFAULT_CUSTOMER_ID` null UUID → `d5cc724a...` (Arianova Web Sales)
-- [ ] **Rotate `CRON_SECRET`** — current value `super_secret_janitor_key_123` is too weak. Generate a strong one:
-  ```bash
-  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-  ```
-  Update in `.env.local` AND Vercel env vars.
+- [x] **Rotate `CRON_SECRET`** — rotated to strong 32-byte hex value (`ba1a2f7e...`).
+  - [x] Updated in `.env.local`
+  - [ ] **Still required: Update `CRON_SECRET` in Vercel → Settings → Environment Variables and redeploy**
 - [x] All security hardening fixes applied (10 audit issues resolved)
 - [x] No plain-text passwords in `.env.local`
 
@@ -51,6 +49,26 @@ Make sure ALL of these are set in Vercel → Settings → Environment Variables:
 
 ### Resend (Emails)
 - [ ] **Dynamic URL Verification**: Confirm `src/lib/urls.ts` is using `getAppUrl()` in `ReceiptEmail.tsx` so customers aren't sent to `localhost:3000` from their phones.
+
+#### ⚠️ Free Tier Limitation — Decide Before Launch
+Resend free tier **only sends to your verified address** (`arianovemanager@gmail.com`).
+Real customers will **not** receive receipt emails on free tier.
+
+| Option | Cost | Result |
+|---|---|---|
+| **Stay free tier** | $0 | Receipts go to your inbox only. Customers get nothing. OK for soft launch. |
+| **Upgrade Resend** | ~$20 USD/month | Customers get receipts. Requires domain verification. |
+
+**If upgrading:**
+- [ ] Verify `arianova.com` domain in Resend Dashboard → Domains
+- [ ] Update `from:` in `src/app/api/webhooks/stripe/route.ts`:
+  ```ts
+  // Change this:
+  from: 'Arianova Estate <onboarding@resend.dev>',
+  // To this:
+  from: 'Arianova Estate <hello@arianova.com>',
+  ```
+- [ ] Redeploy
 
 ### Sanity
 - [ ] **Create webhook** in sanity.io → Project → API → Webhooks:
