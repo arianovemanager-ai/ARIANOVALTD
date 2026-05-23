@@ -71,12 +71,7 @@ Real customers will **not** receive receipt emails on free tier.
 - [ ] Redeploy
 
 ### Sanity
-- [ ] **Create webhook** in sanity.io → Project → API → Webhooks:
-  - URL: `https://yourdomain.com/api/webhooks/sanity/stock-push`
-  - Filter: `_type == "wine"`
-  - Projection: `{_id, sku, physical_stock}`
-  - Trigger: **Update only** (no Drafts, no Versions)
-  - Secret: `a847420dfe438f461dc4a46cc8ffd5c02014872854da69c435837e7d034d02ca`
+- [ ] **Decommission Webhooks**: Confirm no outbound stock-push webhooks are registered in sanity.io (since we use a pull-based Cron architecture).
 - [ ] Change dataset from `development` → `production` (or confirm `development` is intentional)
 
 ### Cin7
@@ -101,9 +96,14 @@ Real customers will **not** receive receipt emails on free tier.
 - [ ] Make a **test abandoned cart** — confirm `committed_stock` releases after 30 min session expiry
 
 ### Inventory Sync Test
-- [ ] Edit `physical_stock` on a wine in Sanity Studio → hit Publish
-- [ ] Confirm Sanity → Cin7 stock push fires (check Vercel logs)
-- [ ] Confirm new stock level appears in Cin7 ProductAvailability
+- [ ] Edit stock level on a wine in Cin7 Core (authoritative source of truth).
+- [ ] Run the inventory sync cron `/api/cron/sync-inventory` manually or wait for the scheduled run.
+- [ ] Confirm new stock level is correctly synced to the Sanity document.
+
+### SEO & Structured Data Verification
+- [ ] **JSON-LD Schema Check**: View the source of a wine detail page (e.g., `/wines/example`) and confirm the `<script type="application/ld+json">` tag exists and contains the correct dynamic Product and Offer metadata (currency `NZD`, correct price, and current availability).
+- [ ] **Heading Hierarchy Check**: Confirm there is exactly one `<h1>` per public page and that it renders before other subheadings.
+- [ ] **Sitemap & Robots Check**: Verify `sitemap.xml` only lists indexable public routes, and private/auth paths (`/cellar`, `/studio`, `/cart`) are correctly disallowed in `robots.txt`.
 
 ---
 
@@ -116,8 +116,8 @@ Real customers will **not** receive receipt emails on free tier.
 ---
 
 ## 📋 Operational Readiness
-- [x] Inventory manager trained on editing `physical_stock` in Sanity Studio
-- [x] Inventory manager knows **not to adjust stock directly in Cin7** (Sanity is the control panel)
+- [x] Inventory manager trained that `physical_stock` is read-only in Sanity Studio and pulled from Cin7 automatically.
+- [x] Inventory manager knows to adjust stock directly in Cin7 Core (which acts as the authoritative source of truth).
 - [ ] **Order Status Management**: Train fulfillment team to manually update Sanity Order status:
     1. Open Sanity Studio.
     2. Navigate to `Recent Sales`.

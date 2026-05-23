@@ -6,7 +6,36 @@ import { SINGLE_WINE_QUERY } from "@/sanity/lib/queries";
 import AddToCartButton from "@/components/shared/AddToCartButton";
 import { urlFor } from "@/sanity/lib/image";
 
+import { getSeoMetadata } from "@/lib/seo";
+import { getWineProductJsonLd } from "@/lib/jsonld";
+import type { Metadata } from "next";
+
 export const revalidate = 0; // Absolute SSR Precision enforcing backend reads upon reload
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const wine = await sanityFetch<any>({
+    query: SINGLE_WINE_QUERY,
+    params: { slug },
+  });
+
+  if (!wine) {
+    return {};
+  }
+
+  const title = `${wine.title} | Arianova Estate`;
+  const description = `Acquire the rare ${wine.vintage ? `Vintage ${wine.vintage}` : ""} ${wine.title} curated by Arianova. Authentic collection direct from partner cellars.`;
+  const displayImageUrl = wine.imageObj
+    ? urlFor(wine.imageObj).width(1200).url()
+    : wine.imageUrl;
+
+  return getSeoMetadata({
+    title,
+    description,
+    path: `/wines/${slug}`,
+    image: displayImageUrl,
+  });
+}
 
 export default async function WinePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -27,9 +56,16 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
     ? urlFor(wine.imageObj).width(1200).url()
     : wine.imageUrl;
 
+  const schema = getWineProductJsonLd(wine);
+
   return (
-    <div className="min-h-screen bg-brand-bg pt-10 pb-24">
-      <div className="container mx-auto px-6 max-w-7xl">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <div className="min-h-screen bg-brand-bg pt-10 pb-24">
+        <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-start">
 
           {/* Left Column: Image */}
@@ -68,10 +104,10 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
 
           {/* Right Column: Details */}
           <div className="flex flex-col pt-8 md:pt-16 md:sticky md:top-32">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-4">
               {wine.winery && <span className="block mb-1 text-brand-accent">{wine.winery}</span>}
               {wine.vintage ? `Vintage ${wine.vintage}` : "Non-Vintage"}
-            </h2>
+            </p>
             <h1 className="font-serif text-4xl md:text-5xl text-brand-foreground mb-4 tracking-wide leading-tight">
               {wine.title}
             </h1>
@@ -92,7 +128,7 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
             {/* Technical Specifications */}
             {(wine.grapeVarieties || wine.alcoholContent) && (
               <div className="mb-12 border-t border-brand-border/10 pt-6">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-brand-foreground/60 mb-4">Specifications</h3>
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-brand-foreground/60 mb-4">Specifications</h2>
                 <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
                   {wine.grapeVarieties && (
                     <div>
@@ -124,5 +160,6 @@ export default async function WinePage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
     </div>
+    </>
   );
 }

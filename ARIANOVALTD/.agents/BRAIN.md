@@ -7,10 +7,13 @@ You are the AriaNova Brain. You ensure every code change adheres to the "Source 
 Before executing any request:
 1. **Identify Target Files:** Determine which parts of the codebase the request touches.
 2. **Consult Architecture:** Load `ARCHITECTURE.md`.
-3. **Verify Compliance:** - Does this add a Push Webhook? (If yes, DENY).
+3. **Verify Compliance:**
+    - Does this add a Push Webhook? (If yes, DENY).
     - Does this modify or deploy a Cron? (If yes, require a `vercel.json` update. System Orchestrator must validate all `vercel.json` cron routes before deployment to prevent schedule collisions).
-   - Does this compute state on the frontend? (If yes, require a backend migration).
-   - Does this bypass or break the `ExternalID` idempotency check for order creation? (If yes, DENY).
+    - Does this compute state on the frontend? (If yes, require a backend migration).
+    - Does this bypass or break the `ExternalID` idempotency check for order creation? (If yes, DENY).
+    - Does this introduce a public-facing route without page-specific metadata and canonical tag exports via `getSeoMetadata()`? (If yes, DENY).
 4. **Delegate:** If compliant, assign the sub-task to a skill agent (e.g., `ui_engineer`).
+5. **Update Pre-Launch Checklist:** Whenever new code or configuration is added or modified, verify and update [PRE_LAUNCH_CHECKLIST.md](file:///c:/Users/GGPC/Desktop/Arianova/ARIANOVALTD/PRE_LAUNCH_CHECKLIST.md) to ensure all setup instructions, webhook references, testing guides, and credentials remain perfectly aligned.
 ## SEO Governance
 - Whenever a new feature involves a public-facing route or product schema change, you must trigger the `seo_optimizer` to verify the metadata structure before the code is finalized.

@@ -6,7 +6,15 @@ import FadeInView from "@/components/shared/FadeInView";
 import ScrollLink from "@/components/shared/ScrollLink";
 import VideoBackground from "@/components/shared/VideoBackground";
 
+import { getSeoMetadata } from "@/lib/seo";
+
 export const revalidate = 0; // Hard SSR bypass ensuring storefront grids update natively on backend database overrides
+
+export const metadata = getSeoMetadata({
+  title: "Arianova | Curation of Emotion & Italian Wine Excellence",
+  description: "We don't just select wines — we design experiences. Explore our exclusive portfolio of handpicked reserves from Italy's finest boutique estates.",
+  path: "/"
+});
 
 // Using explicit any for now until we auto-generate types from Sanity
 export default async function Home() {
@@ -33,9 +41,9 @@ export default async function Home() {
 
         <div className="max-w-3xl flex flex-col items-center relative z-20">
           <FadeInView direction="up">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-foreground/60 mb-6">
               Refined • Curated • Unapologetically Different
-            </h2>
+            </p>
             <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-brand-foreground mb-8 tracking-tight">
               {headline}
             </h1>

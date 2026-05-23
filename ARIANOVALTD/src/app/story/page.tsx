@@ -1,4 +1,12 @@
 import FadeInView from "@/components/shared/FadeInView"
+import { getSeoMetadata } from "@/lib/seo"
+import Image from "next/image"
+
+export const metadata = getSeoMetadata({
+  title: "Our Story | Arianova Estate Curators",
+  description: "Rooted in New Zealand entrepreneurial vision with an Italian touch. Meet Mike, explore the portfolio archives, and learn why wine is never just wine.",
+  path: "/story"
+});
 
 export default function StoryPage() {
   return (
@@ -36,10 +44,15 @@ export default function StoryPage() {
 
           <div className="md:col-span-7 flex flex-col gap-12 mt-12 md:mt-0">
             <FadeInView direction="up" delay={0.2}>
-              <div 
-                className="w-full aspect-[4/5] bg-cover bg-center shadow-xl grayscale-[0.2] contrast-125"
-                style={{ backgroundImage: "url('/images/cellar_editorial_1774069426378.png')" }}
-              />
+              <div className="relative w-full aspect-[4/5] shadow-xl overflow-hidden rounded-sm">
+                <Image 
+                  src="/images/cellar_editorial_1774069426378.png"
+                  alt="The Arianova Portfolio Archives"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover grayscale-[0.2] contrast-125"
+                />
+              </div>
               <p className="text-right mt-4 text-[10px] uppercase font-bold tracking-[0.2em] text-brand-foreground/50">
                 The Arianova Portfolio Archives
               </p>
@@ -62,10 +75,15 @@ export default function StoryPage() {
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <FadeInView direction="up">
-              <div 
-                className="w-full aspect-[3/4] bg-cover bg-top shadow-2xl grayscale-[0.3]"
-                style={{ backgroundImage: "url('/images/MikeUpscaled.jpg')" }}
-              />
+              <div className="relative w-full aspect-[3/4] shadow-2xl overflow-hidden rounded-sm">
+                <Image 
+                  src="/images/MikeUpscaled.jpg"
+                  alt="Mike - The Curator of Arianova"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-top grayscale-[0.3]"
+                />
+              </div>
             </FadeInView>
             <FadeInView direction="left" delay={0.2}>
               <h3 className="text-xs uppercase tracking-[0.4em] text-brand-foreground/60 font-semibold mb-4">

@@ -4,6 +4,13 @@ import Image from "next/image"
 import VideoBackground from "@/components/shared/VideoBackground"
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries"
 import { sanityFetch } from "@/sanity/lib/fetch"
+import { getSeoMetadata } from "@/lib/seo"
+
+export const metadata = getSeoMetadata({
+  title: "Partner Estates | Arianova Curators",
+  description: "Explore our exclusive partner estates in Italy, including Tenute Dello Jato and Tenute Fosca. Temperature-controlled shipping direct to your cellar.",
+  path: "/vineyard"
+});
 
 export default async function VineyardPage() {
   const settings = await sanityFetch<any>({ query: SITE_SETTINGS_QUERY });

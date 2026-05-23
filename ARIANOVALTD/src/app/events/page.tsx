@@ -2,8 +2,15 @@ import { EVENTS_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import EventList from "@/components/events/EventList";
 import FadeInView from "@/components/shared/FadeInView";
+import { getSeoMetadata } from "@/lib/seo";
 
 export const revalidate = 0; // Ensuring live capacities from Stripe bypass cache
+
+export const metadata = getSeoMetadata({
+  title: "Private Tastings & Events | Arianova Wine Curators",
+  description: "Join Arianova's exclusive private tastings, vineyard explorations, and culinary events. Secure your allocation and register for upcoming gatherings.",
+  path: "/events",
+});
 
 // Using explicit any[] temporarily pending strict Sanity Typescript generation mapping
 export default async function EventsPage() {
